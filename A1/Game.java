@@ -1,6 +1,5 @@
 import java.util.*;
 
-
 public class Game {
 	
 	private int framerate;
@@ -33,11 +32,11 @@ public class Game {
 			Random rand = new Random();
 			int x = rand.nextInt(maxWidth);
 			int y = rand.nextInt(maxHeight);
-		
+
 			newpair = new Pair(x,y);
 		}while (used.contains(newpair)); // Find another two points
-		
-		used.add(newpair);
+
+        used.add(newpair);
 		foods.add(newpair);
 		System.out.printf("New Food: %d, %d\n", newpair.left(), newpair.right());
 	}
@@ -75,23 +74,47 @@ public class Game {
 	
 	// a single cycle of game loop execution
 	public void gameRun(){
-		if ((occurence % (framerate/5)) == 0){
-			snake.updateSnake();
-		}
+
+        ArrayList<Pair> snakes = snake.getSnake();
+
+        // react on correct frame
+        if ((occurence % (framerate/1)) == 0) {
+                snake.updateSnake();
+        }
+
+        //
+
+        // update data strucutres
+        used.clear();
+        used.addAll(snake.getSnake());
+        used.addAll(foods);
+
 		occurence++;
+
+        // detect if the snake hits the wall
+        if (snake.hitBoundary(maxWidth, maxHeight)){
+            gameOver();
+        }
 	}
 	
 	// Good Game, Well Played
 	public void gameOver(){
 		gameOver = true;
 	}
+
+    public boolean gameStop() { return gameOver; }
 	
 	// Pair class 
 	class Pair {
 		private int left;
 		private int right;
 		private int hash = 0;
-		
+
+        Pair (Pair p) {
+            this.left = p.left();
+            this.right = p.right();
+        }
+
 		Pair(int l, int r){
 			left = l;
 			right = r;
@@ -111,19 +134,18 @@ public class Game {
 			left += dx;
 			right += dy;
 		}
-
-		// Functions Override for Hash methods
-		@Override
-		public int hashCode(){
-			hash++;
-			return hash;
-		}
 		
 		@Override
 		public boolean equals (Object obj) {
+
 			Pair p = (Pair) obj;
-			return p.left() == left && p.right() == right;
+			return (p.left() == left) && (p.right() == right);
 		}
+
+        @Override
+        public String toString(){
+            return String.format("(%d, %d)", left, right);
+        }
 	} // end of inner class Pair
 
 }

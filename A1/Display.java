@@ -82,6 +82,10 @@ public class Display extends JPanel implements KeyListener, ActionListener {
 		foods = game.getFoods();
 		snake = game.getSnake();
 		repaint();
+
+		if (game.gameStop()){
+			gameThread.stop();
+		}
 	}
 	
 	// Main Game loop

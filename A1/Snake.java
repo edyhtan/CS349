@@ -30,7 +30,6 @@ public class Snake {
 		}// end speed fetch
 		
 		// create windows
-		System.out.println("Hello");
 		JFrame frame = new JFrame("Snake");
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		

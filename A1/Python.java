@@ -19,7 +19,6 @@ public class Python {
 	public void eat(Game.Pair p){
 		char dir = head.getDirection();
 		head = new Segment(p, dir, false);
-		tail = head;
 		snake.add(head);
 	}
 	
@@ -42,7 +41,29 @@ public class Python {
 	
 	// Create new directions for the head
 	public void newDirection(char d){
-		turning.put(head.getPair(), new Character(d));
-		head.direction = d;
+        if (!opposite(d, head.getDirection())) {
+            turning.put(head.getPair(), new Character(d));
+            head.direction = d;
+        }
 	}
+
+	// detect if the head is out of boundry
+	public boolean hitBoundary(int x, int y){
+		return (head.getX() >= x) || (head.getX() < 0) || (head.getY() >= y)  || (head.getY() < 0);
+	}
+
+    public char headDirection(){
+        return head.getDirection();
+    }
+
+    public Game.Pair head(){
+        return head.cord;
+    }
+
+    // determine two character representation of direction is opposite
+    public boolean opposite(char i, char j){
+        return (i == 'l' && j == 'r') || (i == 'r' && j == 'l') ||
+                (i == 'u' && j == 'd') ||  (i == 'd' && j == 'u');
+    }
+
 }

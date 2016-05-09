@@ -1,11 +1,10 @@
 import java.util.Map;
 
-
 public class Segment {
 	
 	Game.Pair cord;
 	char direction;
-	boolean isTail;
+	private boolean isTail;
 	
 	public Segment(Game.Pair p, char dir, boolean t) {
 		cord = p;
@@ -20,7 +19,7 @@ public class Segment {
 	public Game.Pair getPair(){
 		return cord;
 	}
-	
+
 	public void move(Map<Game.Pair, Character> t){
 		
 		// remove any direction segments that's currently played by tail
@@ -46,5 +45,15 @@ public class Segment {
 		if (t.containsKey(cord)){
 			direction = t.get(cord).charValue();
 		}
+	}
+
+	// get x coordinates
+	public int getX(){
+		return cord.left();
+	}
+
+	// get y coordinates
+	public int getY(){
+		return cord.right();
 	}
 }
