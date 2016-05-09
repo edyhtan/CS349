@@ -4,7 +4,7 @@ public class Segment {
 	
 	Game.Pair cord;
 	char direction;
-	private boolean isTail;
+	boolean isTail;
 	
 	public Segment(Game.Pair p, char dir, boolean t) {
 		cord = p;
@@ -20,11 +20,16 @@ public class Segment {
 		return cord;
 	}
 
-	public void move(Map<Game.Pair, Character> t){
+	public void move(Map<Integer, Character> t){
+		
+		// change direction
+		if (t.containsKey(cord.keyGen())){
+			direction = t.get(cord.keyGen()).charValue();
+		}
 		
 		// remove any direction segments that's currently played by tail
-		if (isTail && t.containsKey(cord)){
-			t.remove(cord); 
+		if (isTail && t.containsKey(cord.keyGen())){
+			t.remove(cord.keyGen()); 
 		}
 		
 		//update to new coordintates
@@ -39,11 +44,6 @@ public class Segment {
 			break;
 		default: cord.change(0,0);
 			break;
-		}
-		
-		// change direction
-		if (t.containsKey(cord)){
-			direction = t.get(cord).charValue();
 		}
 	}
 

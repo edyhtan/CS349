@@ -5,30 +5,43 @@ public class Python {
 	ArrayList<Segment> snake;
 	Segment head; // the current head of the python
 	Segment tail; // useful!!
-	Map<Game.Pair, Character> turning; // track the movements and corresponding coordinates
+	Map<Integer, Character> turning; // track the movements and corresponding coordinates
 	Game game;
 	
-	public Python(Game g, Game.Pair p){
+	public Python(Game g, Game.Pair h, Game.Pair t){
 		game = g;
-		head = new Segment(p, 'r', true);
+		head = new Segment(h, 'r', false);
+		
+		// create tails if h != t
+		if (h != t){
+			tail = new Segment(t, 'r', true);
+		}else{
+			head.isTail = true;
+			tail = head;
+		}
+		
 		snake = new ArrayList<Segment>();
-		turning = new HashMap<Game.Pair, Character>();
-		snake.add(head);
+		turning = new HashMap<Integer, Character>();
+		snake.add(head); // add a head
+		snake.add(tail);
 	}
 	
 	public void eat(Game.Pair p){
 		char dir = head.getDirection();
 		head = new Segment(p, dir, false);
 		snake.add(head);
+		game.addScore(10);
+		game.newFood();
 	}
 	
 	// return the coordinates of the snake
-	public ArrayList<Game.Pair> getSnake(){
-		ArrayList<Game.Pair> cord = new ArrayList<Game.Pair>();
+	public ArrayList<Integer> getSnake(){
+		ArrayList<Integer> cord = new ArrayList<Integer>();
 		
 		for (Segment i : snake){
-			cord.add(i.getPair());
+			cord.add(i.getPair().keyGen());
 		}
+		
 		return cord;
 	}
 	
@@ -42,12 +55,13 @@ public class Python {
 	// Create new directions for the head
 	public void newDirection(char d){
         if (!opposite(d, head.getDirection())) {
-            turning.put(head.getPair(), new Character(d));
+            turning.put(head.getPair().keyGen(), new Character(d));
+            System.out.printf("%d, %d at %c\n", head.getX(), head.getY(), d);
             head.direction = d;
         }
 	}
 
-	// detect if the head is out of boundry
+	// detect if the head is out of boundary
 	public boolean hitBoundary(int x, int y){
 		return (head.getX() >= x) || (head.getX() < 0) || (head.getY() >= y)  || (head.getY() < 0);
 	}

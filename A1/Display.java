@@ -12,8 +12,8 @@ public class Display extends JPanel implements KeyListener, ActionListener {
 	private int score = 0;
 	private Game game;
 	
-	private ArrayList<Game.Pair> foods;
-	private ArrayList<Game.Pair> snake;
+	private ArrayList<Integer> foods;
+	private ArrayList<Integer> snake;
 	private Timer gameThread;
 	
 	// constructor
@@ -23,8 +23,8 @@ public class Display extends JPanel implements KeyListener, ActionListener {
 		this.speed = speed;
 		
 		game = new Game(fps, speed);
-		foods = new ArrayList<Game.Pair>();
-		snake = new ArrayList<Game.Pair>();
+		foods = new ArrayList<Integer>();
+		snake = new ArrayList<Integer>();
 		
 		gameThread = new Timer(1000/fps, this);
 		addKeyListener(this); // add Event Handler to this Panel.
@@ -55,9 +55,9 @@ public class Display extends JPanel implements KeyListener, ActionListener {
 	    g2.drawRect(40, 40, 720, 440);
 	    
 		//paint food
-		for (Game.Pair i : foods){
-			int x = i.left();
-			int y = i.right();
+		for (Integer i : foods){
+			int x = Game.decodeX(i.intValue());
+			int y = Game.decodeY(i.intValue());
 			
 			g2.setColor(Color.black);
 			g2.fillRect(40+x*20, 40+y*20, 20, 20);
@@ -66,9 +66,9 @@ public class Display extends JPanel implements KeyListener, ActionListener {
 		}
 		
 		//paint snake
-		for (Game.Pair i : snake){
-			int x = i.left();
-			int y = i.right();
+		for (Integer i : snake){
+			int x = Game.decodeX(i.intValue());
+			int y = Game.decodeY(i.intValue());
 					
 			g2.setColor(Color.green);
 			g2.fillRect(40+x*20, 40+y*20, 20, 20);

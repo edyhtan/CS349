@@ -7,8 +7,8 @@ public class Game {
 	private int score = 0;
 	final int maxWidth = 36; // max unit width
 	final int maxHeight = 22; // max unit height (10 pixels per unit)
-	private HashSet<Pair> used; // track any occupied units
-	private HashSet<Pair> foods;
+	private HashSet<Integer> used; // track any occupied units
+	private HashSet<Integer> foods;
 	private Python snake;
 	private boolean gameOver = false;
 	private int occurence = 0;
@@ -16,10 +16,10 @@ public class Game {
 	Game(int fps, int s){
 		framerate = fps;
 		speed = s;
-		snake = new Python(this, new Game.Pair(4, 4));
+		snake = new Python(this, new Game.Pair(4, 4), new Game.Pair(3, 4));
 		
-		used = new HashSet<Pair>();
-		foods = new HashSet<Pair>();
+		used = new HashSet<Integer>();
+		foods = new HashSet<Integer>();
 		newFood();
 	}
 
@@ -36,8 +36,8 @@ public class Game {
 			newpair = new Pair(x,y);
 		}while (used.contains(newpair)); // Find another two points
 
-        used.add(newpair);
-		foods.add(newpair);
+        used.add(newpair.keyGen());
+		foods.add(newpair.keyGen());
 		System.out.printf("New Food: %d, %d\n", newpair.left(), newpair.right());
 	}
 	
@@ -50,11 +50,11 @@ public class Game {
 	}
 	
 	// Return The list of foods as an ArrayList
-	public ArrayList<Pair> getFoods(){
-		return new ArrayList<Pair>(foods);
+	public ArrayList<Integer> getFoods(){
+		return new ArrayList<Integer>(foods);
 	}
 	
-	public ArrayList<Pair> getSnake(){
+	public ArrayList<Integer> getSnake(){
 		return snake.getSnake();
 	}
 	
@@ -75,14 +75,37 @@ public class Game {
 	// a single cycle of game loop execution
 	public void gameRun(){
 
-        ArrayList<Pair> snakes = snake.getSnake();
-
+        ArrayList<Integer> snakes = snake.getSnake();
+        
+        Integer next = new Integer(snake.head().keyGen());
+        char dir = snake.head.direction;
+        
+        switch (dir){
+        case 'l':
+        	next = next - 1;
+        	break;
+        case 'r':
+        	next = next + 1;
+        	break;
+        case 'u':
+        	next = next - 100;
+        	break;
+        case 'd':
+        	next = next + 100;
+        	break;
+        default:
+        	break;
+        }
+        
         // react on correct frame
         if ((occurence % (framerate/1)) == 0) {
-                snake.updateSnake();
+        	if (foods.contains(next)){
+        		snake.eat(new Pair(decodeX(next), decodeY(next)));
+        		foods.remove(next);
+        	}else{
+        		snake.updateSnake();
+        	}
         }
-
-        //
 
         // update data strucutres
         used.clear();
@@ -101,14 +124,18 @@ public class Game {
 	public void gameOver(){
 		gameOver = true;
 	}
-
+	
+	// Decode the Pair's key into its X/Y components
+	public static int decodeX(int key){ return key%100; }		
+	public static int decodeY(int key){ return key/100; }
+	
+	// Detect if the game has stopped
     public boolean gameStop() { return gameOver; }
 	
 	// Pair class 
 	class Pair {
 		private int left;
 		private int right;
-		private int hash = 0;
 
         Pair (Pair p) {
             this.left = p.left();
@@ -135,11 +162,21 @@ public class Game {
 			right += dy;
 		}
 		
+		// Generates a unique integer key for the pair
+		public int keyGen(){
+			return left + 100*right;
+		}
+		
 		@Override
 		public boolean equals (Object obj) {
-
 			Pair p = (Pair) obj;
 			return (p.left() == left) && (p.right() == right);
+		}
+		
+		@Override
+		public int hashCode() {
+			int hash = left + maxHeight*right;
+			return hash;
 		}
 
         @Override

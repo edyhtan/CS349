@@ -3,6 +3,7 @@ import javax.swing.*;
 public class Snake {
 
 	public static void main(String[] args) {
+		
 		// default values for the game
 		int fps = 30;
 		int speed = 3;
@@ -43,5 +44,6 @@ public class Snake {
 		frame.setResizable(false);
 		frame.setVisible(true);
 		frame.setFocusable(true);
+		
 	}
 }
