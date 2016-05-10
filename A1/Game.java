@@ -14,6 +14,11 @@ public class Game {
 	private Python snake;
 	private boolean gameOver = false;
 	private int occurence = 0;
+    private int length = 0;
+
+    //Power up options:
+    private int powerUps;
+    private int steroidDuration = 0;
 	
 	Game(int fps, int s){
 		framerate = fps;
@@ -26,13 +31,60 @@ public class Game {
         snake = new Python(this, new Game.Pair(4, 4), new Game.Pair(3, 4));
         used = new HashSet<Integer>();
         foods = new HashSet<Integer>();
+        powerUps = 0;
         newFood();
         gameOver = false;
+		pause = false;
         score = 0;
+        length = 0;
+
+        steroidDuration = 0;
     }
     
     public boolean started(){
     	return started;
+    }
+
+    //Steroid Powerups:
+    public void addSteroid(){
+        Pair newpair;
+
+        used.addAll(snake.getSnake());// update snake
+        Random rand = new Random();
+
+        do {
+            int x = rand.nextInt(maxWidth);
+            int y = rand.nextInt(maxHeight);
+            newpair = new Pair(x,y);
+        }while (used.contains(newpair)); // Find another two points
+
+        used.add(newpair.keyGen());
+        powerUps = newpair.keyGen();
+    }
+
+    //Steroid Powerups:
+    public void addLaxation(){
+        Pair newpair;
+
+        used.addAll(snake.getSnake());// update snake
+        Random rand = new Random();
+
+        do {
+            int x = rand.nextInt(maxWidth);
+            int y = rand.nextInt(maxHeight);
+            newpair = new Pair(x,y);
+        }while (used.contains(newpair)); // Find another two points
+
+        used.add(newpair.keyGen());
+        powerUps = 10000 + newpair.keyGen();
+    }
+
+    public void steroid(){
+        steroidDuration = 3*framerate;
+    }
+
+    public int hadSteroid(){
+        return steroidDuration;
     }
 
 	//add one new food to the food map
@@ -42,9 +94,9 @@ public class Game {
 		// Create new food and make check if it's a occupied unit
 		
 		used.addAll(snake.getSnake());// update snake
+        Random rand = new Random();
 		
 		do {
-			Random rand = new Random();
 			int x = rand.nextInt(maxWidth);
 			int y = rand.nextInt(maxHeight);
 			newpair = new Pair(x,y);
@@ -67,6 +119,10 @@ public class Game {
 		return new ArrayList<Integer>(foods);
 	}
 
+    public int getPower(){
+        return powerUps;
+    }
+
     // Return The list of encoded x-y coordinates of the snake.
 	public ArrayList<Integer> getSnake(){
 
@@ -84,7 +140,7 @@ public class Game {
 	
 	//add s to score
 	public void addScore(int s){
-		score += s;
+        score += 10 + speed * s * (steroidDuration > 0 ? 1 : 2);
 	}
 	
 	//return score
@@ -131,13 +187,25 @@ public class Game {
         default:
         	break;
         }
-        
+
+        int timeSlice = (framerate/speed - speed/3) / (steroidDuration > 0 ? 2 : 1);
+
+        // generate steroids
+        Random rand = new Random();
+
+        if (steroidDuration < 1 && rand.nextInt(10000) < 5 && powerUps == 0){
+            addSteroid();
+        }else if (rand.nextInt(10000) < 10 && powerUps == 0){
+            addLaxation();
+        }
+
         // react on correct frame
-        if (occurence % (framerate / (speed) - speed/3 ) == 0) {
-        	if (foods.contains(next)){
+        if (occurence % timeSlice == 0) {
+        	if (foods.contains(next)){ // potentially eating food.
         		snake.eat(new Pair(decodeX(next), decodeY(next)));
         		foods.remove(next);
-        	}else{
+                length++;
+            }else{
         		snake.updateSnake();
         	}
         }
@@ -146,11 +214,30 @@ public class Game {
         used.clear();
         used.addAll(snake.getSnake());
         used.addAll(foods);
+        if (powerUps != 0) {
+            used.add(powerUps % 10000);
+        }
 
 		occurence++;
 
+        if (steroidDuration > 0 ) {
+            steroidDuration--;
+        }
 		snakes.remove(new Integer(snake.head().keyGen())); // removes the head.
-		
+
+        // detect if it ate a power up
+        if (powerUps != 0 && powerUps%10000 == snake.head().keyGen()){
+            if (powerUps/10000 == 0 && steroidDuration == 0){// steroid
+                steroid();
+                powerUps = 0;
+            }else {
+                int cut = (length/3 + 1) > 5 ? 5: (length/3 + 1);
+                snake.diet(cut);
+                length -= cut;
+                powerUps = 0;
+            }
+        }
+
         // detect if the snake hits the wall
         if (snake.hitBoundary(maxWidth, maxHeight) || snakes.contains(snake.head().keyGen())){
             gameOver();
@@ -170,6 +257,10 @@ public class Game {
         pause = !pause;
         occurence = 0;
     }
+
+	public boolean gamePaused(){
+		return pause;
+	}
 
 	// Good Game, Well Played
 	public void gameOver(){

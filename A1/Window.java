@@ -56,7 +56,7 @@ public class Window extends JFrame implements KeyListener {
                 gameStart();
             }
         }else if (key == KeyEvent.VK_R){
-            if (gameStarted) {
+            if (gameStarted && (game.gamePaused()) || game.isGameOver()) {
                 gameEnd();
             }
         }

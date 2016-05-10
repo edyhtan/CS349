@@ -5,8 +5,10 @@ public class Python {
 	ArrayList<Segment> snake;
 	Segment head; // the current head of the python
 	Segment tail; // useful!!
-	Map<Integer, Character> turning; // track the movements and corresponding coordinates
+	HashMap<Integer, Character> turning; // track the movements and corresponding coordinates
 	Game game;
+
+	int threshold = 500;
 	
 	public Python(Game g, Game.Pair h, Game.Pair t){
 		game = g;
@@ -22,22 +24,42 @@ public class Python {
 		
 		snake = new ArrayList<Segment>();
 		turning = new HashMap<Integer, Character>();
-		snake.add(head); // add a head
-		snake.add(tail);
+		snake.add(tail); // add a head
+		snake.add(head);
 	}
-	
+
+	// gain size
 	public void eat(Game.Pair p){
 		char dir = head.getDirection();
 		head = new Segment(p, dir, false);
 		snake.add(head);
-		game.addScore(10);
+		game.addScore(5);
 		
-		//increase total food threshold after 50 scores
-		if (game.getScore() % 50 == 0){
+		//increase total food threshold after 300 scores
+		if (game.getScore() > threshold){
 			game.newFood();
+			threshold *= 2;
 		}
 		// back up a food
 		game.newFood();
+	}
+
+	// remove tail size
+	public void diet(int length){
+
+		if (snake.size() <= 2){
+			return;
+		}
+
+		for (int i = 0; i < length; i++){
+			if (turning.containsKey(tail.cord.keyGen()))
+				turning.remove(tail.cord.keyGen());
+			snake.remove(0);
+			tail = snake.get(0);
+			tail.isTail = true;
+		}
+
+
 	}
 	
 	// return the coordinates of the snake
