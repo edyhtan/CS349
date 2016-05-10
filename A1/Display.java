@@ -15,6 +15,8 @@ public class Display extends JPanel implements KeyListener, ActionListener {
 	private ArrayList<Integer> foods;
 	private ArrayList<Integer> snake;
 	private Timer gameThread;
+
+    private long timeStart;
 	
 	// constructor
 	public Display(int fps, int speed){
@@ -37,8 +39,13 @@ public class Display extends JPanel implements KeyListener, ActionListener {
 		
 		Graphics2D g2 = (Graphics2D) g;
 
+        long realfps = fps;
+
 		//Paint Game Border and Game Informations
-	    String fps = String.format("FPS: %d", this.fps);
+        if (game.frame() != 0) {
+            realfps = game.frame()*1000/ (System.currentTimeMillis() - timeStart);
+        }
+	    String fps = String.format("FPS: %d", realfps);
 	    String speed= String.format("Speed: %d", this.speed);
 	    String score = String.format("Score: %d", this.score);
 
@@ -81,6 +88,7 @@ public class Display extends JPanel implements KeyListener, ActionListener {
 		//Update game status
 		foods = game.getFoods();
 		snake = game.getSnake();
+		score = game.getScore();
 		repaint();
 
 		if (game.gameStop()){
@@ -100,9 +108,16 @@ public class Display extends JPanel implements KeyListener, ActionListener {
 	
 		if (key == KeyEvent.VK_S){
 			gameThread.start();
-		}else if (key == KeyEvent.VK_E){
-			game.gameOver();
-		}else if (key == KeyEvent.VK_UP){
+            timeStart = System.currentTimeMillis();
+		}else if (key == KeyEvent.VK_P){
+			game.togglePause();
+            timeStart = System.currentTimeMillis(); // reset the current Time for real calculation
+		}else if (key == KeyEvent.VK_E) {
+            gameThread.stop(); // exist current game thread
+            game.clean(); // clean the board
+            update(); // clear the screen
+            game.start();
+        }else if (key == KeyEvent.VK_UP){
 			game.snakeMove('u');
 		}else if (key == KeyEvent.VK_DOWN){
 			game.snakeMove('d');
@@ -112,6 +127,7 @@ public class Display extends JPanel implements KeyListener, ActionListener {
 			game.snakeMove('r');
 		}
 	}
+
 	public void keyTyped(KeyEvent e){}
 	public void keyReleased(KeyEvent e){}
 }

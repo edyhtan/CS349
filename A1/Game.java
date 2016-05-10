@@ -5,6 +5,8 @@ public class Game {
 	private int framerate;
 	private int speed;
 	private int score = 0;
+    private boolean pause = false;
+    private boolean started = false;
 	final int maxWidth = 36; // max unit width
 	final int maxHeight = 22; // max unit height (10 pixels per unit)
 	private HashSet<Integer> used; // track any occupied units
@@ -16,12 +18,17 @@ public class Game {
 	Game(int fps, int s){
 		framerate = fps;
 		speed = s;
-		snake = new Python(this, new Game.Pair(4, 4), new Game.Pair(3, 4));
-		
-		used = new HashSet<Integer>();
-		foods = new HashSet<Integer>();
-		newFood();
+		start();
 	}
+
+    //start function used to configurate/re-configurate the game
+    public void start(){
+        snake = new Python(this, new Game.Pair(4, 4), new Game.Pair(3, 4));
+        used = new HashSet<Integer>();
+        foods = new HashSet<Integer>();
+        newFood();
+        gameOver = false;
+    }
 
 	//add one new food to the food map
 	public void newFood(){
@@ -32,13 +39,11 @@ public class Game {
 			Random rand = new Random();
 			int x = rand.nextInt(maxWidth);
 			int y = rand.nextInt(maxHeight);
-
 			newpair = new Pair(x,y);
 		}while (used.contains(newpair)); // Find another two points
 
         used.add(newpair.keyGen());
 		foods.add(newpair.keyGen());
-		System.out.printf("New Food: %d, %d\n", newpair.left(), newpair.right());
 	}
 	
 	// remove the food
@@ -53,11 +58,18 @@ public class Game {
 	public ArrayList<Integer> getFoods(){
 		return new ArrayList<Integer>(foods);
 	}
-	
+
+    // Return The list of encoded xy coordinates of the snake.
 	public ArrayList<Integer> getSnake(){
-		return snake.getSnake();
+
+        if (snake == null){
+            return new ArrayList<Integer>(); // return a empty list if there are no snakes.
+        }
+
+        return snake.getSnake();
 	}
-	
+
+    // assign new movement to the snake.
 	public void snakeMove(char a){
 		snake.newDirection(a);
 	}
@@ -74,6 +86,16 @@ public class Game {
 	
 	// a single cycle of game loop execution
 	public void gameRun(){
+
+        // trigger start flag
+        if (!started){
+            started = true;
+        }
+
+        // the game simply dies if paused
+        if (pause){
+            return;
+        }
 
         ArrayList<Integer> snakes = snake.getSnake();
         
@@ -98,11 +120,13 @@ public class Game {
         }
         
         // react on correct frame
-        if ((occurence % (framerate/1)) == 0) {
+        if (occurence % (framerate / (speed) + speed % 5) == 0) {
         	if (foods.contains(next)){
         		snake.eat(new Pair(decodeX(next), decodeY(next)));
         		foods.remove(next);
-        	}else{
+        	}else if(snakes.contains(next)){
+				gameOver();
+			}else{
         		snake.updateSnake();
         	}
         }
@@ -119,16 +143,35 @@ public class Game {
             gameOver();
         }
 	}
-	
+
+    //clean-up the screen
+    public void clean(){
+        started = false;
+        used.clear();
+        snake = null;
+        foods.clear();
+    }
+
+    //toggle pause
+    public void togglePause(){
+        pause = !pause;
+        occurence = 0;
+    }
+
 	// Good Game, Well Played
 	public void gameOver(){
-		gameOver = true;
+        gameOver = true;
 	}
-	
+
 	// Decode the Pair's key into its X/Y components
 	public static int decodeX(int key){ return key%100; }		
 	public static int decodeY(int key){ return key/100; }
-	
+
+    // Return frame displayed
+    public int frame(){
+        return occurence;
+    }
+
 	// Detect if the game has stopped
     public boolean gameStop() { return gameOver; }
 	
@@ -165,18 +208,6 @@ public class Game {
 		// Generates a unique integer key for the pair
 		public int keyGen(){
 			return left + 100*right;
-		}
-		
-		@Override
-		public boolean equals (Object obj) {
-			Pair p = (Pair) obj;
-			return (p.left() == left) && (p.right() == right);
-		}
-		
-		@Override
-		public int hashCode() {
-			int hash = left + maxHeight*right;
-			return hash;
 		}
 
         @Override

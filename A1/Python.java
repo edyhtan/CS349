@@ -56,7 +56,6 @@ public class Python {
 	public void newDirection(char d){
         if (!opposite(d, head.getDirection())) {
             turning.put(head.getPair().keyGen(), new Character(d));
-            System.out.printf("%d, %d at %c\n", head.getX(), head.getY(), d);
             head.direction = d;
         }
 	}
