@@ -32,7 +32,7 @@ public class Segment {
 			t.remove(cord.keyGen()); 
 		}
 		
-		//update to new coordintates
+		//update to new coordinates
 		switch (direction){
 		case 'l': cord.change(-1, 0);
 			break;

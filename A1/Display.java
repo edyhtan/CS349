@@ -16,7 +16,12 @@ public class Display extends JPanel implements KeyListener, ActionListener {
 	private ArrayList<Integer> snake;
 	private Timer gameThread;
 
+	// used to calculate real FPS
     private long timeStart;
+    private double realfps;
+    
+    static Color Basic = new Color(210, 210, 210);
+    static Color Deep = new Color(35, 35, 35);
 	
 	// constructor
 	public Display(int fps, int speed){
@@ -24,11 +29,13 @@ public class Display extends JPanel implements KeyListener, ActionListener {
 		this.fps = fps;
 		this.speed = speed;
 		
+		realfps = (double) fps;
+		
 		game = new Game(fps, speed);
 		foods = new ArrayList<Integer>();
 		snake = new ArrayList<Integer>();
 		
-		gameThread = new Timer(1000/fps, this);
+		gameThread = new Timer( 1000/fps , this);
 		addKeyListener(this); // add Event Handler to this Panel.
 		setFocusable(false);
 	};
@@ -39,49 +46,62 @@ public class Display extends JPanel implements KeyListener, ActionListener {
 		
 		Graphics2D g2 = (Graphics2D) g;
 
-        long realfps = fps;
-
-		//Paint Game Border and Game Informations
-        if (game.frame() != 0) {
-            realfps = game.frame()*1000/ (System.currentTimeMillis() - timeStart);
-        }
-	    String fps = String.format("FPS: %d", realfps);
+		g2.setColor(Deep);
+        g2.fillRect(0, 0, 800, 580);
+		
+	    String fps = String.format("FPS: %d", (int)realfps);
 	    String speed= String.format("Speed: %d", this.speed);
 	    String score = String.format("Score: %d", this.score);
 
 	    // printing texts
+	    g2.setColor(Color.white);
 	    g2.setFont(new Font("Arial", Font.PLAIN, 18));
 	    g2.drawString(fps, 650, 550);
 	    g2.drawString(speed, 50, 550);
 	    g2.drawString(score, 350, 550);
-	    
-	    // Draw the borderline
-	    g2.setColor(Color.gray);
-	    g2.drawRect(20, 20, 760, 480);
-	    g2.setColor(Color.gray);
-	    g2.drawRect(40, 40, 720, 440);
-	    
-		//paint food
-		for (Integer i : foods){
-			int x = Game.decodeX(i.intValue());
-			int y = Game.decodeY(i.intValue());
-			
-			g2.setColor(Color.black);
-			g2.fillRect(40+x*20, 40+y*20, 20, 20);
-			g2.setColor(Color.lightGray);
-			g2.drawRect(40+x*20, 40+y*20, 20, 20);
-		}
 		
 		//paint snake
 		for (Integer i : snake){
 			int x = Game.decodeX(i.intValue());
 			int y = Game.decodeY(i.intValue());
 					
-			g2.setColor(Color.green);
+			g2.setStroke(new BasicStroke(2));
+			g2.setColor(Color.white);
 			g2.fillRect(40+x*20, 40+y*20, 20, 20);
-			g2.setColor(Color.lightGray);
+			g2.setColor(Deep);
 			g2.drawRect(40+x*20, 40+y*20, 20, 20);
 		}
+		
+		//Trim head
+		if (game.started()){
+			int x = Game.decodeX(game.getHead());
+			int y = Game.decodeY(game.getHead());
+			g2.setColor(Basic);
+			g2.fillRect(40+x*20, 40+y*20, 20, 20);
+			g2.setColor(Deep);
+			g2.drawRect(40+x*20, 40+y*20, 20, 20);
+		}
+		
+		//paint food
+		for (Integer i : foods){
+			int x = Game.decodeX(i.intValue());
+			int y = Game.decodeY(i.intValue());
+					
+			g2.setColor(Color.white);
+			g2.setStroke(new BasicStroke(2));
+			g2.drawRect(40+x*20, 40+y*20, 20, 20);
+			// trims
+			g2.setColor(Color.RED);
+			g2.drawLine(40+x*20+10, 43+y*20, 40+x*20+10, 37+y*20+20);
+			g2.drawLine(40+x*20+3 , 40+y*20+10, 40+x*20+17, 40+y*20+10);
+		}
+	
+		// Draw the borderline
+		g2.setStroke(new BasicStroke(1));
+	    g2.setColor(Color.white);
+	    g2.drawRect(20, 20, 760, 480);
+	    g2.setColor(Color.white);
+	    g2.drawRect(40, 40, 720, 440);
 	}
 	
 	public void update(){
@@ -98,8 +118,11 @@ public class Display extends JPanel implements KeyListener, ActionListener {
 	
 	// Main Game loop
 	public void actionPerformed(ActionEvent e){
+		timeStart = System.currentTimeMillis();
 		game.gameRun();
 		update();
+		
+		realfps = 1000.0/(System.currentTimeMillis() - timeStart + 1000.0/fps); // realFPS calculation
 	}
 	
 	// Keyboard Event
@@ -108,10 +131,8 @@ public class Display extends JPanel implements KeyListener, ActionListener {
 	
 		if (key == KeyEvent.VK_S){
 			gameThread.start();
-            timeStart = System.currentTimeMillis();
 		}else if (key == KeyEvent.VK_P){
 			game.togglePause();
-            timeStart = System.currentTimeMillis(); // reset the current Time for real calculation
 		}else if (key == KeyEvent.VK_E) {
             gameThread.stop(); // exist current game thread
             game.clean(); // clean the board

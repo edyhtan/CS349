@@ -31,6 +31,12 @@ public class Python {
 		head = new Segment(p, dir, false);
 		snake.add(head);
 		game.addScore(10);
+		
+		//increase total food threshold after 50 scores
+		if (game.getScore() % 50 == 0){
+			game.newFood();
+		}
+		// back up a food
 		game.newFood();
 	}
 	
@@ -54,7 +60,7 @@ public class Python {
 	
 	// Create new directions for the head
 	public void newDirection(char d){
-        if (!opposite(d, head.getDirection())) {
+        if (!opposite(d, head.getDirection()) && !turning.containsKey(head.getPair().keyGen())) {
             turning.put(head.getPair().keyGen(), new Character(d));
             head.direction = d;
         }

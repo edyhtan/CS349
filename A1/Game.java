@@ -28,6 +28,11 @@ public class Game {
         foods = new HashSet<Integer>();
         newFood();
         gameOver = false;
+        score = 0;
+    }
+    
+    public boolean started(){
+    	return started;
     }
 
 	//add one new food to the food map
@@ -35,6 +40,9 @@ public class Game {
 		Pair newpair;
 		
 		// Create new food and make check if it's a occupied unit
+		
+		used.addAll(snake.getSnake());// update snake
+		
 		do {
 			Random rand = new Random();
 			int x = rand.nextInt(maxWidth);
@@ -59,7 +67,7 @@ public class Game {
 		return new ArrayList<Integer>(foods);
 	}
 
-    // Return The list of encoded xy coordinates of the snake.
+    // Return The list of encoded x-y coordinates of the snake.
 	public ArrayList<Integer> getSnake(){
 
         if (snake == null){
@@ -82,6 +90,11 @@ public class Game {
 	//return score
 	public int getScore(){
 		return score;
+	}
+	
+	//return encoded integer of snake's head
+	public int getHead(){
+		return snake.head().keyGen();
 	}
 	
 	// a single cycle of game loop execution
@@ -120,26 +133,26 @@ public class Game {
         }
         
         // react on correct frame
-        if (occurence % (framerate / (speed) + speed % 5) == 0) {
+        if (occurence % (framerate / (speed) - speed/3 ) == 0) {
         	if (foods.contains(next)){
         		snake.eat(new Pair(decodeX(next), decodeY(next)));
         		foods.remove(next);
-        	}else if(snakes.contains(next)){
-				gameOver();
-			}else{
+        	}else{
         		snake.updateSnake();
         	}
         }
 
-        // update data strucutres
+        // update data structures
         used.clear();
         used.addAll(snake.getSnake());
         used.addAll(foods);
 
 		occurence++;
 
+		snakes.remove(new Integer(snake.head().keyGen())); // removes the head.
+		
         // detect if the snake hits the wall
-        if (snake.hitBoundary(maxWidth, maxHeight)){
+        if (snake.hitBoundary(maxWidth, maxHeight) || snakes.contains(snake.head().keyGen())){
             gameOver();
         }
 	}
@@ -164,8 +177,21 @@ public class Game {
 	}
 
 	// Decode the Pair's key into its X/Y components
-	public static int decodeX(int key){ return key%100; }		
-	public static int decodeY(int key){ return key/100; }
+	public static int decodeX(int key){ 
+		// edge case
+		if (key%100 == 99){
+			return -1;
+		}
+		return Math.abs(key%100); 
+	}		
+	
+	public static int decodeY(int key){ 
+		// edge cases
+		if (key < 0){
+			return -1;
+		}
+		return Math.abs(key/100); 
+	}
 
     // Return frame displayed
     public int frame(){
@@ -207,6 +233,12 @@ public class Game {
 		
 		// Generates a unique integer key for the pair
 		public int keyGen(){
+			if (left == -1){ // edge case
+				return 99+100*right;
+			}else if (right == -1){
+				return -100 - left;
+			}
+			
 			return left + 100*right;
 		}
 
