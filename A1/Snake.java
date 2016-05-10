@@ -29,21 +29,13 @@ public class Snake {
 				speed = 3;
 			}
 		}// end speed fetch
-		
-		// create windows
-		JFrame frame = new JFrame("Snake");
-		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		
+
 		// custom UI methods
 		Display display = new Display(fps, speed);
-		frame.add(display);
-		frame.addKeyListener(display);
-		
-		// Frame Configs
-		frame.setSize(800, 600);
-		frame.setResizable(false);
-		frame.setVisible(true);
-		frame.setFocusable(true);
-		
+
+		// create windows
+		Window frame = new Window(display);
+		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		frame.addKeyListener(frame);
 	}
 }

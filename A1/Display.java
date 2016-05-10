@@ -39,6 +39,18 @@ public class Display extends JPanel implements KeyListener, ActionListener {
 		addKeyListener(this); // add Event Handler to this Panel.
 		setFocusable(false);
 	};
+
+	public void begin(){
+		gameThread.start();
+        game.start();
+        repaint();
+	}
+
+	public void end(){
+		gameThread.stop();
+        game.clean(); // clean the board
+        update();
+	}
 	
 	// Draw method paints the current JPanel
 	public void paintComponent(Graphics g){
@@ -129,15 +141,8 @@ public class Display extends JPanel implements KeyListener, ActionListener {
 	public void keyPressed(KeyEvent e){
 		int key = e.getKeyCode();
 	
-		if (key == KeyEvent.VK_S){
-			gameThread.start();
-		}else if (key == KeyEvent.VK_P){
-			game.togglePause();
-		}else if (key == KeyEvent.VK_E) {
-            gameThread.stop(); // exist current game thread
-            game.clean(); // clean the board
-            update(); // clear the screen
-            game.start();
+		if (key == KeyEvent.VK_P) {
+            game.togglePause();
         }else if (key == KeyEvent.VK_UP){
 			game.snakeMove('u');
 		}else if (key == KeyEvent.VK_DOWN){
