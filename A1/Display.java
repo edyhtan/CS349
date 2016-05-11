@@ -34,8 +34,8 @@ public class Display extends JPanel implements KeyListener, ActionListener {
 		realfps = (double) fps;
 		
 		game = new Game(fps, speed);
-		foods = new ArrayList<Integer>();
-		snake = new ArrayList<Integer>();
+		foods = null;
+		snake = null;
 		powerUps = 0;
 		
 		gameThread = new Timer( 1000/fps , this);
@@ -92,15 +92,17 @@ public class Display extends JPanel implements KeyListener, ActionListener {
 		}
 
 		//paint snake
-		for (Integer i : snake){
-			int x = Game.decodeX(i.intValue());
-			int y = Game.decodeY(i.intValue());
-					
-			g2.setStroke(new BasicStroke(2));
-			g2.setColor(Color.white);
-			g2.fillRect(40+x*20, 40+y*20, 20, 20);
-			g2.setColor(base);
-			g2.drawRect(40+x*20, 40+y*20, 20, 20);
+		if (snake != null) {
+			for (Integer i : snake) {
+				int x = Game.decodeX(i.intValue());
+				int y = Game.decodeY(i.intValue());
+
+				g2.setStroke(new BasicStroke(2));
+				g2.setColor(Color.white);
+				g2.fillRect(40 + x * 20, 40 + y * 20, 20, 20);
+				g2.setColor(base);
+				g2.drawRect(40 + x * 20, 40 + y * 20, 20, 20);
+			}
 		}
 		
 		//Trim head
@@ -114,11 +116,13 @@ public class Display extends JPanel implements KeyListener, ActionListener {
 		}
 		
 		//paint food
-		for (Integer i : foods){
-			int x = Game.decodeX(i.intValue());
-			int y = Game.decodeY(i.intValue());
-					
-			SplashScreen.paintFood(g2, x, y);
+		if (foods != null) {
+			for (Integer i : foods) {
+				int x = Game.decodeX(i.intValue());
+				int y = Game.decodeY(i.intValue());
+
+				SplashScreen.paintFood(g2, x, y);
+			}
 		}
 
 		//paint the pause frame when paused:

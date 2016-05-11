@@ -195,9 +195,6 @@ public class Game {
             timeSlice = 1;
         }
 
-        if (timeSlice == 0){
-            timeSlice = 1;
-        }
         // generate steroids
         Random rand = new Random();
 
