@@ -188,8 +188,16 @@ public class Game {
         	break;
         }
 
-        int timeSlice = (framerate/speed - speed/3) / (steroidDuration > 0 ? 2 : 1);
+        int timeSlice = (framerate/((speed + speed/4) * (steroidDuration > 0 ? 2 : 1)));
 
+        // boundary check
+        if (timeSlice < 1){
+            timeSlice = 1;
+        }
+
+        if (timeSlice == 0){
+            timeSlice = 1;
+        }
         // generate steroids
         Random rand = new Random();
 
