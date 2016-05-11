@@ -6,7 +6,7 @@ public class Snake {
 		
 		// default values for the game
 		int fps = 30;
-		int speed = 3;
+		int speed = 6;
 		
 		// Fetch Command-line arguments
 		if (args.length >= 1){

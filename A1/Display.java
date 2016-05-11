@@ -205,13 +205,17 @@ public class Display extends JPanel implements KeyListener, ActionListener {
 		if (key == KeyEvent.VK_P) {
             game.togglePause();
         }else if (key == KeyEvent.VK_UP){
-			game.snakeMove('u');
+			if (!game.gamePaused())
+				game.snakeMove('u');
 		}else if (key == KeyEvent.VK_DOWN){
-			game.snakeMove('d');
+			if (!game.gamePaused())
+				game.snakeMove('d');
 		}else if (key == KeyEvent.VK_LEFT){
-			game.snakeMove('l');
+			if (!game.gamePaused())
+				game.snakeMove('l');
 		}else if (key == KeyEvent.VK_RIGHT){
-			game.snakeMove('r');
+			if (!game.gamePaused())
+				game.snakeMove('r');
 		}else if (key == KeyEvent.VK_Q){
 			game.addSteroid();
 		}else if (key == KeyEvent.VK_W){
