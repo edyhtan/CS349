@@ -89,7 +89,7 @@ of the application is tested in both Mac OSX and Linux.
 
 	3.2.2 Power-Ups
 
-  	  In addtion to everything above, the game also have two types of power-ups that 
+  	  In addtional to everything above, the game also have two types of power-ups that 
 	enrich the content of the game, visual representation will be shown with in-game 
 	instruction at the main menu. The two power-ups are:
 	
@@ -111,7 +111,7 @@ of the application is tested in both Mac OSX and Linux.
 	  In order to support testings, I added few extra controls for testing purpose only:
 		- Spawn Steroid (Press Q)
 		- Spawn Laxation (Press W)
-		- Add/Reduce Speed (Press Z or X respectively)
+		- Add/Reduce Speed (Press < or > )
 
 	  Also, since the Power-up is single-ton (pseudo), Spawning new power-ups will replace
 	the old power-ups on random location.

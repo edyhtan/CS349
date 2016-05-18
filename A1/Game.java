@@ -113,6 +113,10 @@ public class Game {
 			foods.remove(p);
 		}
 	}
+
+    public void addSpeed( int s ){
+        speed += s;
+    }
 	
 	// Return The list of foods as an ArrayList
 	public ArrayList<Integer> getFoods(){
@@ -140,7 +144,7 @@ public class Game {
 	
 	//add s to score
 	public void addScore(int s){
-        score += 10 + speed * s * (steroidDuration > 0 ? 1 : 2);
+        score += 10 + speed * s * (steroidDuration > 0 ? 2 : 1);
 	}
 	
 	//return score

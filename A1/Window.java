@@ -43,8 +43,8 @@ public class Window extends JFrame implements KeyListener {
         remove(game);
         removeKeyListener(game);
         add(ss);
-        ss.repaint();
         validate();
+        ss.repaint();
     }
 
     // Keyboard Event

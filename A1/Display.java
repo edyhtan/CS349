@@ -165,6 +165,20 @@ public class Display extends JPanel implements KeyListener, ActionListener {
 	    g2.setColor(Color.white);
 	    g2.drawRect(40, 40, 720, 440);
 	}
+
+	public void increaseSpeed(){
+		if (speed < 10){
+			speed += 1;
+			game.addSpeed(1);
+		}
+	}
+
+	public void decreaseSpeed(){
+		if (speed > 1){
+			speed -= 1;
+			game.addSpeed(-1);
+		}
+	}
 	
 	public void update(){
 		//Update game status
@@ -220,6 +234,10 @@ public class Display extends JPanel implements KeyListener, ActionListener {
 			game.addSteroid();
 		}else if (key == KeyEvent.VK_W){
 			game.addLaxation();
+		}else if (key == KeyEvent.VK_X){
+			increaseSpeed();
+		}else if (key == KeyEvent.VK_Z) {
+			decreaseSpeed();
 		}
 	}
 
