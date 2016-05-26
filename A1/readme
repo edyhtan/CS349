@@ -2,6 +2,25 @@
 # application Snakes. This readme are not only designed for marker,
 # but also any other potential user of the application.
 
+# To Markers:
+#  The game contains several enhancement, however I would like my
+# mark to be credited towards the two power-ups that's been implemented:
+# 	-Speed Up
+#	-Reduce Size
+#
+#  The readme documentation contains many precises details about this 
+# project, for simplicity, please read the following sections for 
+# convenience:
+#   1.0 Introduction
+#   2.1 Installation and Execution
+#   3.1 System Control
+#   3.2.2 Power-ups
+#   3.3 Testing Mode
+#
+#  The following sections will make the game rules more logical:
+#   3.2.1 Score Calculation
+#   4.1 Speed Calculation
+
 1.0 Introduction
 
  The desktop application Snake is a traditional snake game implemented 
@@ -24,7 +43,7 @@ of the application is tested in both Mac OSX and Linux.
     
     No other requirements should be needed.
 
-3.0 Installation and Execution
+2.1 Installation and Execution
 
   The package includes makefile that will generate and runs the application:
 	$ make		- to compile application.
@@ -35,7 +54,7 @@ of the application is tested in both Mac OSX and Linux.
 	$ javac *.java
 	$ java Snake <max-FPS> <speed>
  
-  max-FPS supports value: 1-100 (testing purposes)
+  max-FPS supports value: 30-60( regular game setting) or 1-100 (testing purposes)
   speed supporsts value: 1-10
  
   Recommanded value will be used if non-specified.
@@ -106,7 +125,7 @@ of the application is tested in both Mac OSX and Linux.
 	To prevent ambiguity, there is only 1 power-up at a time. The power-ups will spawn at
 	random time, at a unfrequent rate.
 
-	3.3 Testing Specs
+	3.3 Testing Modes
 
 	  In order to support testings, I added few extra controls for testing purpose only:
 		- Spawn Steroid (Press Q)
@@ -116,7 +135,7 @@ of the application is tested in both Mac OSX and Linux.
 	  Also, since the Power-up is single-ton (pseudo), Spawning new power-ups will replace
 	the old power-ups on random location.
 
-	4.0 Additional Information
+4.0 Additional Information
 
 	4.1 Speed Calculation
 	   Under perfect FPS, the speed should correspond to the following chart:
