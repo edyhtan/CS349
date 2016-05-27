@@ -1,6 +1,6 @@
 make:
 	javac *.java
 run:
-	java Snake 60 10
+	java Snake 30 5
 clean:
 	rm *.class
