@@ -19,6 +19,6 @@ public class OuterPane extends JPanel{
         Tools = new Tools();
 
         this.setLayout(new BorderLayout());
-        this.add(Tools, BorderLayout.LINE_START);
+        this.add(Tools);
     }
 }
