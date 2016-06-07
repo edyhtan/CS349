@@ -18,13 +18,12 @@ public class Tools extends JPanel{
     }; // will change to image view later.
 
     public Tools(){
-        super();
+        super(new GridLayout(2,4));
         tools = new JButton[6];
-
+        
         for (int i = 0 ; i < 6; i ++ ) {
             tools[i] = new JButton(buttons[i]);
             this.add(tools[i]);
         }
-
     }
 }
