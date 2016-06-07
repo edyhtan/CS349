@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
 
 public class JSketch {
 
@@ -7,8 +8,6 @@ public class JSketch {
 
         // create windows
         JFrame frame = new JFrame("JSketch");
-
-        frame.setLayout(new BorderLayout());
 
         // create menu item: file
         JMenuBar menubar = new JMenuBar();
@@ -40,11 +39,43 @@ public class JSketch {
 
         menubar.add(view);
 
-        //Outter pane
-        OuterPane op = new OuterPane();
+        JInternalFrame toolFrame = new JInternalFrame("Tool", true, false, false, false);
+        toolFrame.setVisible(true);
+        toolFrame.setSize(200, 350);
+        toolFrame.setLocation(0,0);
 
-        frame.add(op, BorderLayout.LINE_START);
-        frame.add(menubar, BorderLayout.NORTH);
+        JInternalFrame color = new JInternalFrame("Color", true, false, false, false);
+        color.setVisible(true);
+        color.setSize(200, 200);
+        color.setLocation(0,350);
+
+        JInternalFrame image = new JInternalFrame("Image", true, false, false, false);
+        color.setVisible(true);
+        color.setSize(200, 200);
+        color.setLocation(0,350);
+
+        // Create the desktop
+        JDesktopPane desktop = new JDesktopPane();
+        frame.setContentPane(desktop);
+        frame.setJMenuBar(menubar);
+
+        desktop.add(toolFrame);
+        desktop.add(color);
+
+        desktop.setDragMode(JDesktopPane.LIVE_DRAG_MODE);
+
+        // Dockability testing
+        MouseMotionListener[] motionListeners = (MouseMotionListener[]) toolFrame.getListeners(MouseMotionListener.class);
+
+        for (MouseMotionListener listener : motionListeners){
+            toolFrame.removeMouseMotionListener(listener);
+        }
+
+        for (MouseMotionListener listener : motionListeners){
+            toolFrame.addMouseMotionListener(listener);
+        }
+
+
         // Set windows configuration
         frame.setSize(800,600);
         frame.setMinimumSize(new Dimension(800,600)); // create minimum size
