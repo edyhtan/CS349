@@ -2,15 +2,23 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
-
+import java.awt.geom.Point2D;
 
 class DrawView extends JPanel implements IView{
 
     DrawModel model;
     double scale = 1;
+    static LinearGradientPaint SelectedBorder;
 
     public DrawView() {
         super();
+
+        // create a repeating stripe of gray and white
+        Point2D start = new Point2D.Double(0, 0);
+        Point2D end = new Point2D.Double(10, 10);
+        float[] dist = {0.0f, 0.5f};
+        Color[] colors = {Color.gray, Color.white};
+        SelectedBorder= new LinearGradientPaint(start, end, dist, colors, MultipleGradientPaint.CycleMethod.REPEAT);
 
         DrawInteraction mouseEvent = new DrawInteraction();
         addMouseListener(mouseEvent);
@@ -41,6 +49,9 @@ class DrawView extends JPanel implements IView{
             Xshape shape = shapes.pollLast();
             shape.draw(g2, scale);
         }
+
+        if (selected != null)
+            selected.paintSelectedBorder(g2, scale);
     }
 
     public void rescale(double s){
@@ -57,7 +68,6 @@ class DrawView extends JPanel implements IView{
             int y = e.getY();
 
             pressed = true;
-            //System.out.printf("%f\n",(double)y);
 
             currentTool = model.getTool();
 

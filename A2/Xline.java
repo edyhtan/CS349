@@ -85,21 +85,36 @@ class Xline extends Xshape{
         color = c;
     }
 
+    public void setColor(int c){
+        color = c;
+    }
+
+    public void setThick(int t){
+        thick = t;
+    }
+
     public void draw(Graphics2D g2, double scale){
-
-        //System.out.printf("%f %f %f %f \n", x1, y1, x2, y2);
-
         g2.setStroke(new BasicStroke(thick));
         g2.setColor(ColorPallet.colors[color]);
-
         g2.drawLine((int)(x1*scale),(int)(y1*scale),(int)(x1*scale+x2*scale),(int)(y1*scale+y2*scale));
+    }
+
+    public void paintSelectedBorder(Graphics2D g2, double scale) {
+        g2.setColor(Color.gray);
+        g2.setStroke(new BasicStroke(thick+4));
+        g2.drawLine((int)(x1*scale),(int)(y1*scale),(int)(x1*scale+x2*scale),(int)(y1*scale+y2*scale));
+
+        g2.setStroke(new BasicStroke(thick+2));
+        g2.setPaint(DrawView.SelectedBorder);
+        g2.drawLine((int)(x1*scale),(int)(y1*scale),(int)(x1*scale+x2*scale),(int)(y1*scale+y2*scale));
+
+        draw(g2, scale);
     }
 
     public void saveFile(PrintWriter f){
         String content = String.format("%d %d %d %d %d %d %d %d",0, (int)x1, (int)y1, (int)x2, (int)y2, color, -1, thick);
         f.println(content);
     }
-
 
     public void printCoord(){}
 }

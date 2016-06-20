@@ -33,14 +33,24 @@ class DrawModel {
 
     public void setDrawTool(int tool){
         drawTool = tool;
+        selected = null;
+        Draw.notifyView();
     }
 
     public void setColor(int c){
         color = c;
+        if (selected != null){
+            selected.setColor(c);
+        }
+        Draw.notifyView();
     }
 
     public void setStroke(int t){
         lineThick = t;
+        if (selected != null){
+            selected.setThick(t);
+        }
+        Draw.notifyView();
     }
 
     public int getTool(){
@@ -94,7 +104,6 @@ class DrawModel {
         boolean changed = false;
 
         for (Xshape s : loShape){
-            s.printCoord();
             if (s.contains(x,y,scale)){
                 selected = s;
                 focusX = (int) x;
@@ -105,7 +114,6 @@ class DrawModel {
         }
 
         if (!changed) {
-            System.out.println("Failed");
             selected = null;
         }
 

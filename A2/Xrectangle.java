@@ -19,6 +19,7 @@ class Xrectangle extends Xshape {
     double dy;
 
 
+
     // create Xrectangle, unscaled
     public Xrectangle (int c, int t, int x, int y){
         shape = new Rectangle(new Point(x,y), new Dimension(0, 0));
@@ -48,6 +49,14 @@ class Xrectangle extends Xshape {
     public void setFill(int c){
         filled = true;
         fill = c;
+    }
+
+    public void setColor(int c){
+        color = c;
+    }
+
+    public void setThick(int t){
+        thick = t;
     }
 
     public boolean contains(double x, double y, double scale){
@@ -89,6 +98,19 @@ class Xrectangle extends Xshape {
 
         g2.setColor(ColorPallet.colors[color]);
         g2.drawRect((int)xTop,(int)yTop,(int)Math.abs(dx*scale),(int)Math.abs(dy*scale));
+    }
+
+    public void paintSelectedBorder(Graphics2D g2, double scale) {
+
+        int xTop = (int) (x*scale < (x*scale + dx*scale) ? x*scale : x*scale + dx*scale) - 3;
+        int yTop = (int) (y*scale < (y*scale + dy*scale) ? y*scale : y*scale + dy*scale) - 3;
+
+        g2.setStroke(new BasicStroke(4));
+        g2.setPaint(DrawView.SelectedBorder);
+        g2.drawRect((int) xTop, (int) yTop, (int) (Math.abs((dx+6)*scale)), (int) (Math.abs((dy+6)*scale)));
+        g2.setStroke(new BasicStroke(1));
+        g2.setColor(Color.gray);
+        g2.drawRect((int) xTop-2, (int) yTop-2, (int) (Math.abs((dx+10)*scale)), (int) (Math.abs((dy+10)*scale)));
     }
 
     public void saveFile(PrintWriter f){
