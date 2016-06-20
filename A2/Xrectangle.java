@@ -1,6 +1,8 @@
 import java.awt.*;
 import javax.swing.*;
 import java.lang.*;
+import java.io.*;
+import java.util.*;
 
 class Xrectangle extends Xshape {
     int color;
@@ -87,6 +89,11 @@ class Xrectangle extends Xshape {
 
         g2.setColor(ColorPallet.colors[color]);
         g2.drawRect((int)xTop,(int)yTop,(int)Math.abs(dx*scale),(int)Math.abs(dy*scale));
+    }
+
+    public void saveFile(PrintWriter f){
+        String content = String.format("%d %d %d %d %d %d %d %d", 1, (int)x, (int)y, (int)dx, (int)dy, color, fill, thick);
+        f.println(content);
     }
 
     public void printCoord(){

@@ -1,6 +1,8 @@
 import java.awt.*;
 import javax.swing.*;
 import java.lang.*;
+import java.io.*;
+import java.util.*;
 
 abstract class Xshape {
     int color;
@@ -15,5 +17,6 @@ abstract class Xshape {
     abstract void confirm();
     abstract void printCoord();
     abstract void setFill(int c);
+    abstract void saveFile(PrintWriter f);
 
 }

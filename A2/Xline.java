@@ -2,6 +2,8 @@ import java.awt.*;
 import java.awt.geom.Line2D;
 import javax.swing.*;
 import java.lang.*;
+import java.io.*;
+import java.util.*;
 
 class Xline extends Xshape{
     int color;
@@ -92,6 +94,12 @@ class Xline extends Xshape{
 
         g2.drawLine((int)(x1*scale),(int)(y1*scale),(int)(x1*scale+x2*scale),(int)(y1*scale+y2*scale));
     }
+
+    public void saveFile(PrintWriter f){
+        String content = String.format("%d %d %d %d %d %d %d %d",0, (int)x1, (int)y1, (int)x2, (int)y2, color, -1, thick);
+        f.println(content);
+    }
+
 
     public void printCoord(){}
 }

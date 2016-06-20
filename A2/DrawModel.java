@@ -164,16 +164,37 @@ class DrawModel {
 
     public void saveFile(File file) {
 
+        try {
+            FileWriter fw;
+            PrintWriter pw;
+
+            if (!file.exists()) {
+                file.createNewFile();
+                fw = new FileWriter(file, true);
+                pw = new PrintWriter(fw);
+            } else {
+                fw = new FileWriter(file, false);
+                pw = new PrintWriter(fw);
+            }
+
+            for (Xshape s : loShape) {
+                s.saveFile(pw);
+            }
+
+            pw.close();
+        }catch (IOException e) {}
     }
 
     public void loadFile(File file) {
-        if (file != null) {
+        if (file.exists()) {
 
             try {
                 ArrayDeque<Xshape> loNew = new ArrayDeque<Xshape>();
-                Scanner scan = new Scanner(file);
+                FileReader read = new FileReader(file);
+                Scanner scan = new Scanner(read);
 
                 while (scan.hasNextInt()) {
+
                     int type = scan.nextInt();
                     int x1 = scan.nextInt();
                     int y1 = scan.nextInt();
@@ -187,12 +208,14 @@ class DrawModel {
                         loNew.addFirst( new Xline(color, thick, x1, y1, x2, y2) );
                     }else if (type == 1){
                         loNew.addFirst( new Xrectangle(color, thick, x1, y1, x2, y2, fill));
-                    }else if (type == 3){
+                    }else if (type == 2){
                         loNew.addFirst( new Xcircle(color, thick, x1, y1, x2, y2, fill));
                     }
+
                 }
                 clear();
                 loShape = loNew;
+
             }catch (FileNotFoundException e) {}
         }
     }

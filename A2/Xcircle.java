@@ -2,6 +2,8 @@ import java.awt.*;
 import javax.swing.*;
 import java.lang.*;
 import java.awt.geom.Ellipse2D;
+import java.util.*;
+import java.io.*;
 
 class Xcircle extends Xshape {
     int color;
@@ -87,6 +89,12 @@ class Xcircle extends Xshape {
         g2.setColor(ColorPallet.colors[color]);
         g2.drawOval((int)xTop,(int)yTop,(int)(Math.abs(deltaX*scale)), (int)(Math.abs(deltaY*scale)));
 
+    }
+
+    public void saveFile(PrintWriter f){
+
+        String content = String.format("%d %d %d %d %d %d %d %d",2, (int)x, (int)y, (int)deltaX, (int)deltaY, color, fill, thick);
+        f.println(content);
     }
 
     public void printCoord(){}
