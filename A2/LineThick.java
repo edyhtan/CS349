@@ -30,7 +30,13 @@ class LineThick extends JInternalFrame implements IView{
     public void addModel(DrawModel model){
         this.dmodel = model;
     }
-    public void notifyView() {}
+
+    public void notifyView() {
+        Tgroup.clearSelection();
+        Tgroup.setSelected(TG[dmodel.lineThick-1].getModel(), true);
+        TG[dmodel.lineThick-1].setSelected(!isSelected());
+        repaint();
+    }
 
     class Lines extends JToggleButton{
 

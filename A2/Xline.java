@@ -56,8 +56,10 @@ class Xline extends Xshape{
             return false;
 
         // compute the linear equation
-        double coeff = y2 / x2;
-        double constant = y1 - coeff * x1;
+
+            double coeff = (x2 == 0 ? 0 : y2 / x2);
+            double constant = y1 - coeff * x1;
+
 
         System.out.printf("%f\n",coeff);
         System.out.printf("%f\n",Math.abs(y - coeff * x - constant));
@@ -91,6 +93,14 @@ class Xline extends Xshape{
 
     public void setThick(int t){
         thick = t;
+    }
+
+    public int getThick(){
+        return thick;
+    }
+
+    public int getColor(){
+        return color;
     }
 
     public void draw(Graphics2D g2, double scale){

@@ -59,6 +59,14 @@ class Xrectangle extends Xshape {
         thick = t;
     }
 
+    public int getThick(){
+        return thick;
+    }
+
+    public int getColor(){
+        return color;
+    }
+
     public boolean contains(double x, double y, double scale){
         return shape.contains(x/scale,y/scale);
     }
@@ -107,10 +115,10 @@ class Xrectangle extends Xshape {
 
         g2.setStroke(new BasicStroke(4));
         g2.setPaint(DrawView.SelectedBorder);
-        g2.drawRect((int) xTop, (int) yTop, (int) (Math.abs((dx+6)*scale)), (int) (Math.abs((dy+6)*scale)));
+        g2.drawRect((int) xTop, (int) yTop,(int)((Math.abs(dx)+6)*scale), (int)((Math.abs(dy)+6)*scale));
         g2.setStroke(new BasicStroke(1));
         g2.setColor(Color.gray);
-        g2.drawRect((int) xTop-2, (int) yTop-2, (int) (Math.abs((dx+10)*scale)), (int) (Math.abs((dy+10)*scale)));
+        g2.drawRect((int) xTop-2, (int) yTop-2, (int)((Math.abs(dx)+10)*scale), (int)((Math.abs(dy)+10)*scale));
     }
 
     public void saveFile(PrintWriter f){

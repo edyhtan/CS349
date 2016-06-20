@@ -5,7 +5,7 @@ import java.io.*;
 
 class DrawModel {
 
-    IView views[]; // list of other views, currently none
+    ArrayList<IView> views; // list of other views, currently none
     ArrayDeque<Xshape> loShape;
 
     //other important attributes:
@@ -25,10 +25,15 @@ class DrawModel {
 
     public DrawModel(){
         loShape = new ArrayDeque<Xshape>();
+        views = new ArrayList<IView>();
     }
 
     public void setDrawCanvas(IView draw){
         Draw = draw;
+    }
+
+    public void addIViews(IView view){
+        views.add(view);
     }
 
     public void setDrawTool(int tool){
@@ -42,6 +47,7 @@ class DrawModel {
         if (selected != null){
             selected.setColor(c);
         }
+
         Draw.notifyView();
     }
 
@@ -50,6 +56,7 @@ class DrawModel {
         if (selected != null){
             selected.setThick(t);
         }
+
         Draw.notifyView();
     }
 
@@ -106,6 +113,8 @@ class DrawModel {
         for (Xshape s : loShape){
             if (s.contains(x,y,scale)){
                 selected = s;
+                color = s.getColor();
+                lineThick = s.getThick();
                 focusX = (int) x;
                 focusY = (int) y;
                 changed = true;
@@ -118,6 +127,10 @@ class DrawModel {
         }
 
         Draw.notifyView();
+
+        for (IView v : views){
+            v.notifyView();
+        }
     }
 
     public boolean onSelected(double x, double y, double scale){

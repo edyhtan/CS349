@@ -32,8 +32,6 @@ class MainFrame extends JFrame implements IView{
     SketchPanel sketchPanel;
 
     //Resizing Attributes
-    int xsquare;
-    int ysquare;
     boolean proportionalDisplay; // used to specifies view mode
 
     public MainFrame(){
@@ -81,9 +79,6 @@ class MainFrame extends JFrame implements IView{
         cHeight = 600;
         cWidth = 800;
 
-        xsquare = 0;
-        ysquare = 0;
-
         this.setSize(800,600);
         this.setMinimumSize(new Dimension(800,600)); // create minimum size
         this.setVisible(true);
@@ -94,6 +89,8 @@ class MainFrame extends JFrame implements IView{
     public void addModel(DrawModel m){
         model = m;
         model.setDrawCanvas(image);
+        model.addIViews(color);
+        model.addIViews(thickness);
 
         // below classes uses IView
         image.addModel(m);
@@ -104,7 +101,6 @@ class MainFrame extends JFrame implements IView{
     }
 
     public void setProportionalDisplay(boolean b){
-        sketchPanel.resetSizeData();
         image.setPreferredSize(new Dimension (600, 450));
         image.rescale(1);
         this.setSize(800, 600);
@@ -151,8 +147,8 @@ class MainFrame extends JFrame implements IView{
     }
 
     //Resizes the JInnerFrames
-    public void childrenResize(int dx, int dy){
-        sketchPanel.childreanResize(dx, dy, proportionalDisplay);
+    public void childrenResize(){
+        sketchPanel.childreanResize(getWidth(), getHeight(), proportionalDisplay);
     }
 
 
@@ -161,12 +157,7 @@ class MainFrame extends JFrame implements IView{
 
         public void componentResized(ComponentEvent e) {
             super.componentResized(e);
-
-            if (proportionalDisplay)
-                childrenResize(getWidth() - cWidth, getHeight() - cHeight);
-
-            cHeight = getHeight();
-            cWidth = getWidth();
+            childrenResize();
         }
     }
 

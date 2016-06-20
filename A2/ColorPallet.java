@@ -39,7 +39,12 @@ class ColorPallet extends JInternalFrame implements IView{
         TG[0].setSelected(true);
     }
 
-    public void notifyView() {}
+    public void notifyView() {
+        Tgroup.clearSelection();
+        Tgroup.setSelected(TG[dmodel.color].getModel(), true);
+        TG[dmodel.color].setSelected(!isSelected());
+        repaint();
+    }
 
     public void addModel(DrawModel model){
         this.dmodel = model;

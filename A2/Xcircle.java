@@ -82,6 +82,14 @@ class Xcircle extends Xshape {
         thick = t;
     }
 
+    public int getThick(){
+        return thick;
+    }
+
+    public int getColor(){
+        return color;
+    }
+
     public void draw(Graphics2D g2, double scale){
 
         int xTop = (int) (x*scale < (x*scale + deltaX*scale) ? x*scale : x*scale + deltaX*scale);
@@ -106,10 +114,10 @@ class Xcircle extends Xshape {
 
         g2.setStroke(new BasicStroke(4));
         g2.setPaint(DrawView.SelectedBorder);
-        g2.drawOval((int) xTop, (int) yTop, (int) (Math.abs((deltaX+6)*scale)), (int) (Math.abs((deltaY+6)*scale)));
+        g2.drawOval((int) xTop, (int) yTop, (int)((Math.abs(deltaX)+6)*scale), (int)((Math.abs(deltaY)+6)*scale));
         g2.setStroke(new BasicStroke(1));
         g2.setColor(Color.gray);
-        g2.drawOval((int) xTop-2, (int) yTop-2, (int) (Math.abs((deltaX+10)*scale)), (int) (Math.abs((deltaY+10)*scale)));
+        g2.drawOval((int) xTop-2, (int) yTop-2, (int)((Math.abs(deltaX)+10)*scale), (int)((Math.abs(deltaY)+10)*scale));
     }
 
     public void saveFile(PrintWriter f){

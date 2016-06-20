@@ -11,9 +11,6 @@ class SketchPanel extends JPanel {
     DrawView drawView;
     JPanel outterFrame;
 
-    int xsquare = 0;
-    int ysquare = 0;
-
     int xleftOver = 0;
     Component LeftPadding;
 
@@ -39,23 +36,20 @@ class SketchPanel extends JPanel {
         };
 
         outterFrame.setLayout(new FlowLayout());
-        //outterFrame.add();
+        outterFrame.add(Box.createRigidArea(new Dimension(120, 0)));
         outterFrame.add(drawView);
 
         GridBagConstraints gbc = new GridBagConstraints();
 
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.weighty = 0.6;
-        gbc.weightx = 1;
+        gbc.weighty = 0.5;
         gbc.fill = GridBagConstraints.BOTH;
 
         this.add(Box.createGlue(), gbc);
 
-        gbc.gridx = 1;
         gbc.gridy = 1;
-        gbc.weighty = 0.8;
-        gbc.weightx = 1.5;
+        gbc.weighty = 1.0;
 
         this.add(outterFrame, gbc);
     }
@@ -66,48 +60,17 @@ class SketchPanel extends JPanel {
         g.fillRect(0, 0, getWidth(), getHeight());
     }
 
-    public void resetSizeData(){
-        xsquare = 0;
-        ysquare = 0;
-    }
-
-    public void childreanResize(int dx, int dy, boolean isProportional){
+    public void childreanResize(int x, int y, boolean isProportional){
 
         if (!isProportional)
             return;
 
-        xsquare += dx;
-        ysquare += dy;
+        double xPortion = x/800.0;
+        double yPortion = y/600.0;
+        double min= xPortion < yPortion ? xPortion : yPortion;
 
-        if (xsquare > 0 && ysquare > 0) {
-            int min = xsquare > ysquare ? ysquare : xsquare;
+        drawView.setPreferredSize(new Dimension ((int)(DRAWFRAMEX*min), (int)(DRAWFRAMEY*min)));
 
-            drawView.setPreferredSize(new Dimension (drawView.getWidth() + min, drawView.getHeight() + min));
-            xsquare -= min;
-            ysquare -= min;
-
-        }else {
-
-            if (xsquare < 0) {
-                drawView.setPreferredSize(new Dimension(drawView.getWidth() + xsquare, drawView.getHeight() + xsquare));
-                ysquare -= xsquare;
-                xsquare = 0;
-            }
-
-            if (ysquare < 0) {
-                drawView.setPreferredSize(new Dimension(drawView.getWidth() + ysquare, drawView.getHeight() + ysquare));
-                xsquare -= ysquare;
-                ysquare = 0;
-
-                // minor adjustment if x-square become lower than 0
-                if (xsquare < 0) {
-                    drawView.setPreferredSize(new Dimension(drawView.getWidth() + xsquare, drawView.getHeight() + xsquare));
-                    ysquare -= xsquare;
-                    xsquare = 0;
-                }
-            }
-        }
-
-        drawView.rescale(drawView.getWidth() /DRAWFRAMEX);
+        drawView.rescale(min);
     }
 }

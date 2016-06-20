@@ -5,10 +5,7 @@ import java.io.*;
 import java.util.*;
 
 abstract class Xshape {
-    int color;
-    boolean filled;
-    Shape shape;
-    int thick;
+
 
     abstract boolean contains(double x, double y, double scale);
     abstract void draw(Graphics2D g, double scale);
@@ -21,5 +18,8 @@ abstract class Xshape {
     abstract void setColor(int c);
     abstract void setThick(int t);
     abstract void saveFile(PrintWriter f);
+
+    abstract int getThick();
+    abstract int getColor();
 
 }
