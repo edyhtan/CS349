@@ -1,4 +1,5 @@
 
 interface IView {
-    public void notifyView();
+    abstract void notifyView();
+    abstract void addModel(DrawModel model);
 }
