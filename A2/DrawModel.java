@@ -169,6 +169,7 @@ class DrawModel {
             PrintWriter pw;
 
             if (!file.exists()) {
+                file = new File(file.toString()+".ximage");
                 file.createNewFile();
                 fw = new FileWriter(file, true);
                 pw = new PrintWriter(fw);
