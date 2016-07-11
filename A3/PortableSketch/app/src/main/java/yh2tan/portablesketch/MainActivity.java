@@ -89,7 +89,6 @@ public class MainActivity extends Activity implements IView {
                     int x = (int) e.getX();
                     int y = (int) e.getY();
 
-                    Log.d(logId, "DOWN");
                     // calls upon the model
                     if (model.tool == 0) { // selection
                         model.select(x, y);
@@ -108,7 +107,6 @@ public class MainActivity extends Activity implements IView {
                     int x = (int) e.getX();
                     int y = (int) e.getY();
 
-                    Log.d(logId, "UP");
                     // calls upon the model
                     if (model.tool == 0) { // selection
                         model.lightUnleash();
@@ -125,7 +123,6 @@ public class MainActivity extends Activity implements IView {
                     int x = (int) e.getX();
                     int y = (int) e.getY();
 
-                    Log.d(logId,"MOVED");
                     // calls upon the model
                     if (model.tool == 0 && model.getSelected() != null) { // selection
                         model.moveShape(x,y);
@@ -214,7 +211,6 @@ public class MainActivity extends Activity implements IView {
                     int x = (int) e.getX();
                     int y = (int) e.getY();
 
-                    Log.d(logId, "DOWN");
                     // calls upon the model
                     if (model.tool == 0) { // selection
                         model.select(x, y);
@@ -233,7 +229,6 @@ public class MainActivity extends Activity implements IView {
                     int x = (int) e.getX();
                     int y = (int) e.getY();
 
-                    Log.d(logId, "UP");
                     // calls upon the model
                     if (model.tool == 0) { // selection
                         model.lightUnleash();
@@ -250,7 +245,6 @@ public class MainActivity extends Activity implements IView {
                     int x = (int) e.getX();
                     int y = (int) e.getY();
 
-                    Log.d(logId,"MOVED");
                     // calls upon the model
                     if (model.tool == 0 && model.getSelected() != null) { // selection
                         model.moveShape(x,y);
