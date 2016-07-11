@@ -203,7 +203,7 @@ public class DrawModel {
         undoStack.addFirst(getCopy());
         redoStack.clear();
         // for memory purpose we only store up to 5 objects
-        if (undoStack.size() > 5)
+        if (undoStack.size() > 10)
             undoStack.pollLast();
     }
 
