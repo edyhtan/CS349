@@ -216,8 +216,6 @@ public class DrawModel {
         redoStack.addFirst(getCopy());
         loShape = fetchArray(undoStack.pollFirst());
         android.notifyView();
-
-        Log.d("DrawModel", "undo");
     }
 
     public void redo(){
@@ -229,8 +227,6 @@ public class DrawModel {
         undoStack.addFirst(getCopy());
         loShape = fetchArray(redoStack.pollFirst());
         android.notifyView();
-
-        Log.d("DrawModel", "redo");
     }
 
     public ArrayDeque<int[]> getCopy(){

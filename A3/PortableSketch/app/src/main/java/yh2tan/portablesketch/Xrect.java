@@ -49,7 +49,6 @@ public class Xrect implements Xshape {
         fill = color;
     }
     public void setColor(int color) {
-        Log.d("Xrect", String.format("%d", color));
         this.color = color;
     }
     public void setThick(int thick) {

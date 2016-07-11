@@ -86,7 +86,6 @@ public class Xline implements Xshape {
         if ( x > botX || x < topX || y > botY || y < topY)
             return false;
 
-        Log.d("Xline", String.format("%f %f",  Math.abs(y - coeff * x - constant), (thickness+2)*2 + Math.abs(coeff*5)));
         // give few pixel of freedom
         return  Math.abs(y - coeff * x - constant) < (thickness+2)*4 + Math.abs(coeff*5);
     }

@@ -195,9 +195,6 @@ public class MainActivity extends Activity implements IView {
         undo.setOnClickListener(util);
         redo.setOnClickListener(util);
         clear.setOnClickListener(util);
-
-
-
     }
 
     @Override
@@ -329,10 +326,6 @@ public class MainActivity extends Activity implements IView {
         lineThickness.check(lineID[model.thickness]);
         toolBar.setActiveRadioButton( (RadioButton)findViewById(toolID[model.tool]));
         colorPallet.setActiveRadioButton( (RadioButton)findViewById(colorID[model.color]));
-
-        Log.d(logId, String.format("tool: %d", model.tool));
-        Log.d(logId, String.format("color: %d", model.color));
-        Log.d(logId, String.format("thick: %d", model.thickness));
     }
 
     public void notifyView(){
