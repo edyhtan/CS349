@@ -159,14 +159,14 @@ landscape mode.
 			- Repainting any Shapes
 			- Change the border for any shapes (color and strokes)
 			- Deleting any shapes
-		For demo purposes, it only support up to 5 undos.
+		For demo purposes, it only support up to 10 undos.
 
 		3.5.2 Redo
 			Redo will rewind if there is a undo action made by 
 		user. If any new action occurred(that’s not a undo or redo), 
 		any redo history will be cleaned. 
-			Since the app only supports 5 undo, it can only revert 
-		up to 5 redo.
+			Since the app only supports 10 undo, it can only revert 
+		up to 10 redo.
 		
 		3.5.3 Clear
 			Clear button cleans the canvas. Note that it also 
