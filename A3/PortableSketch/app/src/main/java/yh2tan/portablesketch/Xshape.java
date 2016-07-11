@@ -17,9 +17,9 @@ abstract interface Xshape {
     void changeXY2(int dx, int dy);
     boolean contains(double x, double y); //check if the points are contained by the shape
 
+    int[] getInfo();
 
     // Control function
-    void confirm(); // complete the shape
     void drawShape(Canvas c); // this function is called during render
     void drawSelectedBorder(Canvas c); // this function should be called when the shape is selected
 }

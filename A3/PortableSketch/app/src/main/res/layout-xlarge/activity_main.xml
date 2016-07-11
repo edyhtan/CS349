@@ -12,20 +12,26 @@
 
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
         <Space
             android:layout_width="20px"
             android:layout_height="35dp"
             android:id="@+id/space" />
 
-        <yh2tan.portablesketch.DrawView
-            android:layout_width="600dp"
-            android:layout_height="600dp"
-            android:background="#FFF"
-            android:layout_above="@+id/tableLayout"
-            android:layout_alignParentStart="true" />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <yh2tan.portablesketch.DrawView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#FFF"
+                android:layout_above="@+id/tableLayout"
+                android:layout_alignParentStart="true" />
+        </LinearLayout>
 
         <Space
             android:layout_width="20px"

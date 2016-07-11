@@ -1,5 +1,7 @@
 package yh2tan.portablesketch;
 
+import java.util.ArrayList;
+
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -23,6 +25,9 @@ public class DrawView extends View {
     private float mTextWidth;
     private float mTextHeight;
 
+    //Store model for easier drawings
+    DrawModel model;
+
     public DrawView(Context context) {
         super(context);
         init(null, 0);
@@ -37,6 +42,8 @@ public class DrawView extends View {
         super(context, attrs, defStyle);
         init(attrs, defStyle);
     }
+
+    public void setModel(DrawModel m) { model = m; }
 
     private void init(AttributeSet attrs, int defStyle) {
         // Load attributes
@@ -62,8 +69,6 @@ public class DrawView extends View {
 
         a.recycle();
 
-
-
         // Update TextPaint and text measurements from attributes
         invalidateTextPaintAndMeasurements();
     }
@@ -83,21 +88,23 @@ public class DrawView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        // TODO: consider storing these as member variables to reduce
-        // allocations per draw cycle.
-        int paddingLeft = getPaddingLeft();
-        int paddingTop = getPaddingTop();
-        int paddingRight = getPaddingRight();
-        int paddingBottom = getPaddingBottom();
+        //Draw white background
+        Paint paint = new Paint();
+        paint.setStyle(Paint.Style.FILL);
+        paint.setColor(Color.WHITE);
+        canvas.drawRect(0,0,canvas.getWidth(), canvas.getHeight(),paint);
 
-        int contentWidth = getWidth() - paddingLeft - paddingRight;
-        int contentHeight = getHeight() - paddingTop - paddingBottom;
+        //Draw shapes
+        ArrayList<Xshape> shapes = new ArrayList(model.getAllShape());
 
-        // Draw the example drawable on top of the text.
-        if (mExampleDrawable != null) {
-            mExampleDrawable.setBounds(paddingLeft, paddingTop,
-                    paddingLeft + contentWidth, paddingTop + contentHeight);
-            mExampleDrawable.draw(canvas);
+        for (int i = shapes.size()-1 ; i >= 0; i--){
+            shapes.get(i).drawShape(canvas);
+        }
+
+        //Draw Border
+        Xshape border = model.getSelected();
+        if (border != null){
+            border.drawSelectedBorder(canvas);
         }
     }
 
@@ -180,12 +187,12 @@ public class DrawView extends View {
         mExampleDrawable = exampleDrawable;
     }
 
-    /*
+
+
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 
         //MUST CALL THIS
-        setMeasuredDimension(750, 750);
+        setMeasuredDimension(1100, 1100);
     }
-    */
 }

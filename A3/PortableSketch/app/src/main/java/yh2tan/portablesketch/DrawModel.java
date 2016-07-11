@@ -1,6 +1,11 @@
 package yh2tan.portablesketch;
 
+import android.graphics.LinearGradient;
+import android.graphics.Color;
+import android.graphics.Shader;
+import android.util.Log;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Stack;
 
 /**
@@ -17,56 +22,75 @@ public class DrawModel {
     int focusX = 0;
     int focusY = 0;
 
+    // store flag (use to indicate if the movement requires storing)
+    boolean stored = false;
+
+    static LinearGradient selectedBorder;
+
     // shapes and actions
     ArrayDeque<Xshape> loShape;
     Xshape selected;
 
     // undo/redo operation
-    ArrayDeque<ArrayDeque<Xshape>> undoStack;
-    ArrayDeque<ArrayDeque<Xshape>> redoStack;
+    ArrayDeque<ArrayDeque<int[]>> undoStack;
+    ArrayDeque<ArrayDeque<int[]>> redoStack;
 
     // main activity
-    IView android;
+    MainActivity android;
 
     // contructor
-    public DrawModel(IView a) {
+    public DrawModel(MainActivity a) {
         loShape = new ArrayDeque<Xshape>();
-        undoStack = new ArrayDeque<ArrayDeque<Xshape>>();
-        redoStack = new ArrayDeque<ArrayDeque<Xshape>>();
+        undoStack = new ArrayDeque<ArrayDeque<int[]>>();
+        redoStack = new ArrayDeque<ArrayDeque<int[]>>();
         android = a;
+
+        //used to sketch the border
+        selectedBorder = new LinearGradient(0,0,10,10,Color.GRAY,Color.WHITE, Shader.TileMode.REPEAT);
     }
 
     // set attribute functions
     public void setColor(int c) {
+        Log.d("DrawModel", String.format("%d",c));
         color = c;
-        if (selected != null) selected.setColor(color);
+        Log.d("DrawModel", String.format("%b",selected == null));
+        if (selected != null) {
+            makeChanges();
+            selected.setColor(color);
+        }
         android.notifyView();
     }
 
     public void setThickness(int t) {
+
         thickness = t;
-        if (selected != null) selected.setThick(thickness);
+        if (selected != null){
+            makeChanges();
+            selected.setThick(thickness);
+        }
         android.notifyView();
     }
 
     public void setTool(int t) {
         tool = t;
-        selected = null;
+        if (tool != 0)
+            selected = null;
         android.notifyView();
     }
 
     public void createShape(int x, int y) {
         Xshape newshape;
 
-        if (tool == 2)
+        if (tool == 1)
             newshape = new Xline(x, y, color, thickness);
-        else if (tool == 3)
+        else if (tool == 2)
             newshape = new Xrect(x, y, color, thickness);
-        else if (tool == 4)
+        else if (tool == 3)
             newshape = new Xcircle(x, y, color, thickness);
         else
             return;
 
+        makeChanges();
         selected = newshape;
         loShape.addFirst(selected);
         android.notifyView();
@@ -83,6 +107,7 @@ public class DrawModel {
         focusX = 0;
         focusY = 0;
 
+        stored = false;
         android.notifyView();
     }
 
@@ -109,7 +134,23 @@ public class DrawModel {
                 thickness = s.getThick();
                 focusX = x;
                 focusY = y;
-                break;
+                android.notifyView();
+                android.setButtonState();
+                return;
+            }
+        }
+
+        selected = null;
+        android.notifyView();
+    }
+
+    public void removeShape(int x, int y){
+        for (Xshape s : loShape){
+            if (s.contains(x,y)){
+                makeChanges();
+                loShape.remove(s);
+                android.notifyView();
+                return;
             }
         }
 
@@ -126,15 +167,20 @@ public class DrawModel {
 
 
     public void moveShape(int x, int y) {
+        if (!stored){
+            stored = true;
+            makeChanges();
+        }
         selected.changeXY1(x - focusX, y - focusY);
         focusX = x;
         focusY = y;
         android.notifyView();
     }
 
-    public void setFilled(double x, double y, double scale) {
+    public void setFilled(int x, int y) {
         for (Xshape s : loShape) {
             if (s.contains(x, y)) {
+                makeChanges();
                 s.fill(color);
                 android.notifyView();
                 return;
@@ -145,13 +191,16 @@ public class DrawModel {
     }
 
     public void clear() {
+        selected = null;
         loShape = new ArrayDeque<Xshape>();
         android.notifyView();
+        undoStack = new ArrayDeque<ArrayDeque<int[]>>();
+        redoStack = new ArrayDeque<ArrayDeque<int[]>>();
     }
 
     // undo/redo
-    public void makeChanges(ArrayDeque<Xshape> state){
-        undoStack.addFirst(new ArrayDeque<Xshape>(state));
+    public void makeChanges(){
+        undoStack.addFirst(getCopy());
         redoStack.clear();
         // for memory purpose we only store up to 5 objects
         if (undoStack.size() > 5)
@@ -159,12 +208,56 @@ public class DrawModel {
     }
 
     public void undo(){
-        redoStack.addFirst(new ArrayDeque<Xshape>(loShape));
-        loShape = undoStack.pollFirst();
+        selected = null;
+
+        if (undoStack.isEmpty())
+            return;
+
+        redoStack.addFirst(getCopy());
+        loShape = fetchArray(undoStack.pollFirst());
+        android.notifyView();
+
+        Log.d("DrawModel", "undo");
     }
 
     public void redo(){
-        undoStack.addFirst(new ArrayDeque<Xshape>(loShape));
-        loShape = redoStack.pollFirst();
+        selected = null;
+
+        if (redoStack.isEmpty())
+            return;
+
+        undoStack.addFirst(getCopy());
+        loShape = fetchArray(redoStack.pollFirst());
+        android.notifyView();
+
+        Log.d("DrawModel", "redo");
+    }
+
+    public ArrayDeque<int[]> getCopy(){
+        ArrayDeque<int[]> newAr = new ArrayDeque<int[]>();
+
+        for (Xshape s: loShape){
+            newAr.addLast(s.getInfo());
+        }
+
+        return newAr;
+    }
+
+    public ArrayDeque<Xshape> fetchArray(ArrayDeque<int[]> infos){
+        ArrayDeque<Xshape> newDeq = new ArrayDeque<Xshape>();
+
+        for (int[] i:infos){
+            if (i.length == 6){
+                newDeq.addLast(new Xline(i));
+            }else if (i.length == 7){
+                newDeq.addLast(new Xrect(i));
+            }else if (i.length == 8){
+                newDeq.addLast(new Xcircle(i));
+            }else {
+                Log.d("Fetch Array", "Error array size");
+            }
+        }
+
+        return newDeq;
     }
 }
