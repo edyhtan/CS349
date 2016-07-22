@@ -8,8 +8,8 @@ Email: hsurale@uwaterloo.ca
 == Layout  [20%] ==
 /10 - A toolbar exists [2] with a set of buttons (selection rectangle, delete shape, rectangle, circle, line, fill colour [6]). Tapping on a tool button should visibly select it and de-select any previously selected button [2].
 
-4/10 - Application supports drawing and adapts to both landscape and portrait orientation. The screen dynamically adjusts to the orientation, using a different layout for each one [6]. No tools, palettes or shapes are clipped or off-screen [4].
-// unable to change orientation.
+/10 - Application supports drawing and adapts to both landscape and portrait orientation. The screen dynamically adjusts to the orientation, using a different layout for each one [6]. No tools, palettes or shapes are clipped or off-screen [4].
+
 == User Interface [30%] ==
 /15 - Colour palette. Displays at least 3 colour in a palette-style view [2], which the user can select to set the property for drawing a new shape [5]. Tapping on a color should visibly select it and de-select any previously selected color [3]. Tapping on the fill tool and tapping on a shape will fill the shape with that colour [5]. 
 
@@ -26,4 +26,4 @@ Email: hsurale@uwaterloo.ca
 /10 - Application incorporates one or more enhancements totalling 10%, as described in the requirements.
 
 Total:
-90/100
+96/100
