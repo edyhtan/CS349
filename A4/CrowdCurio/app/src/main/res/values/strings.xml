@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">CrowdCurio</string>
+    <string name="serachhint">serach</string>
+    <string name="title_project_detail">Project Detail</string>
+</resources>

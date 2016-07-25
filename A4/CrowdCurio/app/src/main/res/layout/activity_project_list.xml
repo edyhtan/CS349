@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".MainActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:background="@android:color/transparent">
+
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <GridLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:rowCount="2"
+        android:columnCount="1">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
+
+            <EditText
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/editText"
+                android:hint="@string/serachhint"
+                android:background="@android:color/transparent"
+                android:paddingLeft="10dp"
+                android:drawableLeft="@android:drawable/ic_menu_search"
+                android:drawablePadding="5dp"
+                android:textColor="#ffffff"
+                android:textColorHint="#ffffff"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:singleLine="true" />
+        </RelativeLayout>
+
+        <include layout="@layout/project_list"
+            android:layout_row="1"
+            android:layout_column="0"
+            android:layout_height="fill_parent"
+            android:layout_width="match_parent" />
+
+    </GridLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/refreshmain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@android:drawable/stat_notify_sync" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/favourite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|end"
+        android:layout_marginBottom="95dp"
+        android:layout_marginTop="85dp"
+        app:layout_anchor="@+id/refreshmain"
+        app:layout_anchorGravity="top"
+        android:src="@drawable/white_star"
+        android:tint="@color/abc_background_cache_hint_selector_material_light"
+        />
+
+</android.support.design.widget.CoordinatorLayout>
