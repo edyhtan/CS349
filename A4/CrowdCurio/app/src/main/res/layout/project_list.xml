@@ -5,9 +5,12 @@
     android:id="@+id/project_list"
     android:name="yh2tan.crowdcurio.ProjectListFragment"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
+    android:layout_marginBottom="50dp"
     app:layoutManager="LinearLayoutManager"
     tools:context="yh2tan.crowdcurio.ProjectListActivity"
-    tools:listitem="@layout/project_list_content" />
+    tools:listitem="@layout/project_list_content"
+    app:layout_scrollFlags="scroll|enterAlways"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"/>

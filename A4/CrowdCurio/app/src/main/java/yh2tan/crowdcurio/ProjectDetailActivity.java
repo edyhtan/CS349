@@ -23,6 +23,7 @@ public class ProjectDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_project_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
+
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
