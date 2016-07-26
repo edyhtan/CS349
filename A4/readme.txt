@@ -119,7 +119,7 @@ after any search request. (Originally used to get all project onclick)
   Finally, search type drop down list provide specific fields to search for (ie name or description).
 The default would be the name.
 
-3.3 Add/Delete Favourite Project
+3.3 Add/Delete Favourite Project (Used for bonus)
 
   The app provides Favourite filtering to allow user to add and delete project from their favourite
 filtering list. To add/delete, user may have to longtap the list item in master view. 
