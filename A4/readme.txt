@@ -165,3 +165,6 @@ image differs between projects, and some project has condensed bitmap that slows
 	1. User finished an entry.
 	2. Using Device Native action buttons below.
   Currently there is no clean and precis 
+
+- The majority of the text are in white, however some image does not constrast well with white, resulting bad 
+ visibility with the title and the return button on the detail view.

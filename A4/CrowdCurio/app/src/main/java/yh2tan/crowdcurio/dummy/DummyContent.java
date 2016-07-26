@@ -119,6 +119,8 @@ public class DummyContent {
                 DummyItem item = new DummyItem(id, name, avatar, shortd, longd, owner, isActive);
                 item.getMember(member);
 
+                item.setFavourite(favourite.contains(id));
+
                 ITEMS.add(item);
                 ITEM_MAP.put(item.id, item);
 
