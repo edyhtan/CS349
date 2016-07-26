@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -43,6 +44,7 @@ public class MemberFragment extends Fragment{
     String memberID;
     private OnListFragmentInteractionListener mListener;
     RecyclerView recyclerView;
+    ProgressBar spinner;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -122,6 +124,7 @@ public class MemberFragment extends Fragment{
         void onListFragmentInteraction(MemberItem item);
     }
 
+
     class GetJson extends AsyncTask<String, Void, Void>{
 
         JSONObject json;
@@ -129,7 +132,6 @@ public class MemberFragment extends Fragment{
 
         @Override
         protected void onPreExecute(){
-            //spinner.setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -191,7 +193,7 @@ public class MemberFragment extends Fragment{
 
             if (recyclerView != null)
                 recyclerView.setAdapter(new MyMemberRecyclerViewAdapter(MemberContent.ITEMS, mListener));
-            //spinner.setVisibility(View.GONE);
+
         }
     }
 }

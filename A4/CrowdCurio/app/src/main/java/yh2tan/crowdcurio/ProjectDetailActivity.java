@@ -62,6 +62,9 @@ public class ProjectDetailActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_project_detail);
+
+        spinner = (ProgressBar) findViewById(R.id.pb2);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
 
         setSupportActionBar(toolbar);
@@ -81,7 +84,6 @@ public class ProjectDetailActivity extends AppCompatActivity
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        spinner = (ProgressBar) findViewById(R.id.pb2);
 
         mItem = DummyContent.ITEM_MAP.get(getIntent().getStringExtra(ProjectDetailFragment.ARG_ITEM_ID));
         // Create the detail fragment and add it to the activity
@@ -94,15 +96,6 @@ public class ProjectDetailActivity extends AppCompatActivity
         viewPager = (ViewPager) findViewById(R.id.detailTab);
         viewPager.setAdapter(new MyAdapter(getSupportFragmentManager()));
 
-        // savedInstanceState is non-null when there is fragment state
-        // saved from previous configurations of this activity
-        // (e.g. when rotating the screen from portrait to landscape).
-        // In this case, the fragment will automatically be re-added
-        // to its container so we don't need to manually add it.
-        // For more information, see the Fragments API guide at:
-        //
-        // http://developer.android.com/guide/components/fragments.html
-        //
         if (savedInstanceState == null) {
 
             // using a fragment transaction.

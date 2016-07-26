@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import org.json.JSONArray;
 
@@ -43,6 +44,7 @@ public class CurioFragment extends Fragment{
     DummyContent.DummyItem mItem;
 
     RecyclerView recyclerView;
+    ProgressBar spinner;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -117,7 +119,6 @@ public class CurioFragment extends Fragment{
         curio.execute("http://test.crowdcurio.com/api/curio/");
     }
 
-
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -140,7 +141,6 @@ public class CurioFragment extends Fragment{
 
         @Override
         protected void onPreExecute(){
-            //spinner.setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -197,7 +197,6 @@ public class CurioFragment extends Fragment{
             CurioContent.constructContent(jsonArray, curioid);
             if (recyclerView != null)
                 recyclerView.setAdapter(new MyCurioRecyclerViewAdapter(CurioContent.ITEMS, mListener));
-            //spinner.setVisibility(View.GONE);
         }
     }
 }

@@ -62,6 +62,13 @@
                 android:background="@android:color/transparent"
                 android:layout_weight="1" />
 
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:id="@+id/delete"
+                android:background="@android:drawable/ic_input_delete"/>
+
             <Spinner
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"

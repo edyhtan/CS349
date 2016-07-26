@@ -31,6 +31,7 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -77,6 +78,7 @@ public class ProjectListActivity extends AppCompatActivity {
     ProgressBar spinner;
     Spinner searchType;
 
+    Button delete;
     FetchData fetch;
 
     String current = "http://test.crowdcurio.com/api/project/";
@@ -97,6 +99,13 @@ public class ProjectListActivity extends AppCompatActivity {
         favourite = (FloatingActionButton) findViewById(R.id.favourite);
         refresh = (FloatingActionButton) findViewById(R.id.refreshmain);
         spinner = (ProgressBar) findViewById(R.id.pb1);
+        delete = (Button) findViewById(R.id.delete);
+        delete.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                entry.setText("");
+            }
+        });
 
         refresh.setOnClickListener(new View.OnClickListener() {
             @Override
