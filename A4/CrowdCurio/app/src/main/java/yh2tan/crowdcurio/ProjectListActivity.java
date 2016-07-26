@@ -109,6 +109,8 @@ public class ProjectListActivity extends AppCompatActivity {
         favourite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) { // == to be replaced by favourite
+                //FetchData newfetch = new FetchData();
+                //newfetch.execute("http://test.crowdcurio.com/api/project/");
                 DummyContent.filterFavourite();
                 setupRecyclerView((RecyclerView) recyclerView);
             }
@@ -238,6 +240,32 @@ public class ProjectListActivity extends AppCompatActivity {
                     }
                 }
             });
+
+            holder.mView.setOnLongClickListener(new View.OnLongClickListener(){
+                @Override
+                public boolean onLongClick(View view) {
+
+                    if (holder.mItem.favourite){
+                        DummyContent.removeFavourite(holder.mItem.id);
+                        Context context = getApplicationContext();
+                        CharSequence text = "Project has been removed from favourite";
+                        int duration = Toast.LENGTH_SHORT;
+
+                        Toast toast = Toast.makeText(context, text, duration);
+                        toast.show();
+                        return true;
+                    }else{
+                        DummyContent.addFavourite(holder.mItem.id);
+                        Context context = getApplicationContext();
+                        CharSequence text = "Project has been added from favourite";
+                        int duration = Toast.LENGTH_SHORT;
+
+                        Toast toast = Toast.makeText(context, text, duration);
+                        toast.show();
+                        return true;
+                    }
+                }
+            });
         }
 
         @Override
@@ -331,8 +359,8 @@ public class ProjectListActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void voids){
             Log.d("fetch data", "Spinner Off");
-            setupRecyclerView((RecyclerView) recyclerView);
             DummyContent.constructContent(jsonArray);
+            setupRecyclerView((RecyclerView) recyclerView);
             spinner.setVisibility(View.GONE);
         }
     }

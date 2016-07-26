@@ -46,24 +46,31 @@ public class DummyContent {
     /* add a favourite project by ID */
     public static void addFavourite(String i){
         favourite.add(i);
+        Log.d("add", i);
         ITEM_MAP.get(String.valueOf(i)).setFavourite(true);
     }
 
-    public static void remveFavourite(String i){
+    public static void removeFavourite(String i){
         favourite.remove(i);
+        Log.d("remove", i);
         ITEM_MAP.get(String.valueOf(i)).setFavourite(false);
     }
 
     public static void filterFavourite(){
-        for (int i = 0; i < COUNT; i++){
-            if (!favourite.contains(String.valueOf(i+1))){
-                DummyItem it = ITEM_MAP.get(String.valueOf(i+1));
-                Log.d(tag, String.format("%s", it.id));
-                Log.d(tag, String.format("%b",ITEMS.remove(it)));
+
+        List<DummyItem> newItem = new ArrayList<DummyItem>();
+        Map<String, DummyItem> newMap = new HashMap<String, DummyItem>();
+        COUNT = 0;
+        for (DummyItem di : ITEMS){
+            if (favourite.contains(di.id)){
+                newItem.add(di);
+                newMap.put(di.id,di);
+                COUNT++;
             }
         }
 
-        COUNT = favourite.size();
+        ITEMS = newItem;
+        ITEM_MAP = newMap;
     }
 
     private static void addItem(DummyItem item) {
@@ -93,7 +100,6 @@ public class DummyContent {
         ITEM_MAP.clear();
 
         COUNT = json.length();
-        Log.d(tag, String.format("%d", COUNT));
 
         // construct contents with given resource
         for (int i = 0; i < json.length(); i ++){
@@ -108,8 +114,10 @@ public class DummyContent {
                 String longd = jo.getString("description");
                 boolean isActive = jo.getBoolean("is_active");
                 String owner = jo.getString("owner");
+                JSONArray member = jo.getJSONArray("team");
 
                 DummyItem item = new DummyItem(id, name, avatar, shortd, longd, owner, isActive);
+                item.getMember(member);
 
                 ITEMS.add(item);
                 ITEM_MAP.put(item.id, item);
@@ -130,14 +138,11 @@ public class DummyContent {
         public final String longcontent;
         public final boolean available;
         public final String owner;
-        public ArrayList<Integer> CurioIndex;
-        public ArrayList<String> Curio;
-        public ArrayList<String> Motive;
-        public ArrayList<String> MemberID;
-        public ArrayList<String> MemberURL;
         public final String avt;
         public Bitmap image;
         public boolean favourite;
+
+        public ArrayList<Integer> member;
 
         public DummyItem(String id, String name, String avt, String content, String detail, String owner, boolean available) {
             this.id = id;
@@ -148,21 +153,22 @@ public class DummyContent {
             this.owner = owner;
             this.available = available;
             this.favourite = false;
+            member = new ArrayList<Integer>();
         }
 
+        public void getMember(JSONArray json){
+            for (int i = 0; i < json.length(); i++){
+                try {
+                    member.add(json.getJSONObject(i).getInt("id"));
+                }catch (JSONException e){}
+            }
+        }
         public void setImage(Bitmap original){
             image = original;
         }
-
         public void setFavourite(boolean t){
             this.favourite = t;
         }
-
-        public void fetchContent(){};
-
-        public void fetchCurio(){};
-
-        public void fetchMember(){};
 
         @Override
         public String toString() {

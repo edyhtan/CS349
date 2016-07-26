@@ -23,7 +23,8 @@
             android:name=".ProjectDetailActivity"
             android:label="@string/title_project_detail"
             android:parentActivityName=".ProjectListActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="yh2tan.crowdcurio.ProjectListActivity" />

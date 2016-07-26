@@ -1,14 +1,38 @@
 package yh2tan.crowdcurio;
 
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.graphics.drawable.BitmapDrawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
+import android.widget.ProgressBar;
+
+import org.json.JSONArray;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import yh2tan.crowdcurio.dummy.CurioContent;
+import yh2tan.crowdcurio.dummy.DummyContent;
+import yh2tan.crowdcurio.dummy.MemberContent;
 
 /**
  * An activity representing a single Project detail screen. This
@@ -16,7 +40,23 @@ import android.view.MenuItem;
  * item details are presented side-by-side with a list of items
  * in a {@link ProjectListActivity}.
  */
-public class ProjectDetailActivity extends AppCompatActivity {
+public class ProjectDetailActivity extends AppCompatActivity
+        implements CurioFragment.OnListFragmentInteractionListener,
+                   MemberFragment.OnListFragmentInteractionListener{
+
+    ViewPager viewPager;
+    DescriptionFragment description;
+    CurioFragment curioList;
+    MemberFragment members;
+
+    DummyContent.DummyItem mItem;
+    FloatingActionButton fab;
+    ActionBar actionBar;
+
+    AppBarLayout appbar;
+    CollapsingToolbarLayout ctbl;
+
+    ProgressBar spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,20 +66,33 @@ public class ProjectDetailActivity extends AppCompatActivity {
 
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own detail action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                curioList.refetch();
+                members.refetch();
             }
         });
 
         // Show the Up button in the action bar.
-        ActionBar actionBar = getSupportActionBar();
+        actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+
+        spinner = (ProgressBar) findViewById(R.id.pb2);
+
+        mItem = DummyContent.ITEM_MAP.get(getIntent().getStringExtra(ProjectDetailFragment.ARG_ITEM_ID));
+        // Create the detail fragment and add it to the activity
+        appbar = (AppBarLayout)findViewById(R.id.app_bar);
+        appbar.setBackground(new BitmapDrawable(mItem.image));
+
+        ctbl = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
+        ctbl.setTitle(mItem.name);
+
+        viewPager = (ViewPager) findViewById(R.id.detailTab);
+        viewPager.setAdapter(new MyAdapter(getSupportFragmentManager()));
 
         // savedInstanceState is non-null when there is fragment state
         // saved from previous configurations of this activity
@@ -51,16 +104,19 @@ public class ProjectDetailActivity extends AppCompatActivity {
         // http://developer.android.com/guide/components/fragments.html
         //
         if (savedInstanceState == null) {
-            // Create the detail fragment and add it to the activity
+
             // using a fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putString(ProjectDetailFragment.ARG_ITEM_ID,
-                    getIntent().getStringExtra(ProjectDetailFragment.ARG_ITEM_ID));
-            ProjectDetailFragment fragment = new ProjectDetailFragment();
-            fragment.setArguments(arguments);
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.project_detail_container, fragment)
-                    .commit();
+            arguments.putString("ID", getIntent().getStringExtra(ProjectDetailFragment.ARG_ITEM_ID));
+
+            description = new DescriptionFragment();
+            curioList = new CurioFragment();
+            members = new MemberFragment();
+            curioList.forcePass(getIntent().getStringExtra(ProjectDetailFragment.ARG_ITEM_ID));
+            members.forcePass(getIntent().getStringExtra(ProjectDetailFragment.ARG_ITEM_ID));
+            description.setArguments(arguments);
+            curioList.setArguments(arguments);
+            members.setArguments(arguments);
         }
     }
 
@@ -78,5 +134,38 @@ public class ProjectDetailActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void onListFragmentInteraction(CurioContent.CurioItem item) {}
+    public void onListFragmentInteraction(MemberContent.MemberItem item) {}
+
+    class MyAdapter extends FragmentPagerAdapter{
+
+        public MyAdapter(FragmentManager fm) {
+            super(fm);
+        }
+        public final String[] titles= {"Description", "Questions", "Team"};
+
+        @Override
+        public Fragment getItem(int position) {
+            if (position == 0){
+                return description;
+            }else if (position == 1){
+                return curioList;
+            }else if (position == 2){
+                return members;
+            }
+            return null;
+        }
+
+        @Override
+        public int getCount() {
+            return 3;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position){
+            return titles[position];
+        }
     }
 }
